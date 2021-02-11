@@ -1,0 +1,40 @@
+beps_PATH = ./BEPShourly
+beps_src = $(beps_PATH)/src
+# VIC_DRVSHR = $(VIC_PATH)/drivers/shared_all
+# HDRS = -I "$(VIC_RUN)/include" -I "$(VIC_DRVSHR)/include" -I "."
+# LOG_LVL = 25
+
+PKG_CPPFLAGS = -g -O3 -I"$(beps_PATH)/include" -I.
+PKG_CFLAGS = -std=c99 ${PKG_CPPFLAGS}
+
+# CFLAGS=-std=c99 -O3
+# CFLAGS=
+
+ODIR=${beps_PATH}/src
+IDIR=${beps_src}
+
+# first name a variable OBJSects for all OBJSect files
+_OBJS = aerodynamic_conductance.o bepsmain_pnt.o Leaf_Temperature.o \
+  inter_prg.o evaporation_canopy.o evaporation_soil.o init_soil.o \
+  lai_calc.o meteo_pack.o netRadiation.o photosyn_gs.o plant_respir.o \
+  rainfall.o readcoef.o readparam.o s_coszs.o \
+  sensible_heat.o snowpack.o soil_thermal_regime.o \
+  soil_water_stress.o soilresp.o surface_temp.o \
+  transpiration.o updatesoilmoisture.o vcmax_jmax_mod.o
+
+
+SOURCES_CPP = BEPS_R.cpp RcppExports.cpp
+OBJECTS = $(patsubst %,$(ODIR)/%,$(_OBJS)) $(SOURCES_CPP:.cpp=.o)
+SOURCES_C = $(OBJECTS:.o=.c)
+
+# OBJECTS = $(SOURCES_C:.c=.o) $(SOURCES_CPP:.cpp=.o)
+
+# $(ODIR)/%.o: $(IDIR)/%.c
+# 	$(CC) -c -o $@ $< $(CFLAGS)
+
+all: $(SHLIB)
+
+# .PHONY: clean
+
+clean:
+	rm -rf $(OBJECTS) *.exe *.o *.so *.dll
