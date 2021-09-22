@@ -7,125 +7,121 @@
 // also see https://nature.berkeley.edu/biometlab/BiometWeb/leaf_energy_ps.c
 /*
 
-         This program solves a cubic equation to calculate
-         leaf photosynthesis.  This cubic expression is derived from solving
-         five simultaneous equations for A, PG, cs, CI and GS.
-         Stomatal conductance is computed with the Ball-Berry model.
-         The cubic derivation assumes that b', the intercept of the Ball-Berry
-         stomatal conductance model, is non-zero.
+    This program solves a cubic equation to calculate
+    leaf photosynthesis.  This cubic expression is derived from solving
+    five simultaneous equations for A, PG, cs, CI and GS.
+    Stomatal conductance is computed with the Ball-Berry model.
+    The cubic derivation assumes that b', the intercept of the Ball-Berry
+    stomatal conductance model, is non-zero.
 
-          Gs = k A rh/cs + b'
+    Gs = k A rh/cs + b'
 
+    We also found that the solution for A can be obtained by a quadratic equation
+    when Gs is constant or b' is zero.
 
-          We also found that the solution for A can be obtained by a quadratic equation
-          when Gs is constant or b' is zero.
+    The derivation is published in:
 
-
-            The derivation is published in:
-
-            Baldocchi, D.D. 1994. An analytical solution for coupled leaf photosynthesis
-            and stomatal conductance models. Tree Physiology 14: 1069-1079.
-
-
+    Baldocchi, D.D. 1994. An analytical solution for coupled leaf photosynthesis
+    and stomatal conductance models. Tree Physiology 14: 1069-1079.
 -----------------------------------------------------------------------
 
-          A Biochemical Model of C3 Photosynthesis
+    A Biochemical Model of C3 Photosynthesis
 
-            After Farquhar, von Caemmerer and Berry (1980) Planta.
-            149: 78-90.
+    After Farquhar, von Caemmerer and Berry (1980) Planta.
+    149: 78-90.
 
-        The original program was modified to incorporate functions and parameters
-        derived from gas exchange experiments of Harley, who paramertized Vc and J in
-        terms of optimal temperature, rather than some reference temperature, eg 25C.
+    The original program was modified to incorporate functions and parameters
+    derived from gas exchange experiments of Harley, who paramertized Vc and J in
+    terms of optimal temperature, rather than some reference temperature, eg 25C.
 
-        Program calculates leaf photosynthesis from biochemical parameters
+    Program calculates leaf photosynthesis from biochemical parameters
 
-        rd25 - Dark respiration at 25 degrees C (umol m-2 s-1)
-        tlk - leaf temperature, Kelvin
-        jmax - optimal rate of electron transport
-        vcopt - maximum rate of RuBP Carboxylase/oxygenase
-        iphoton - incident photosynthetically active photon flux (umols m-2 s-1)
-   
-            note: Harley parameterized the model on the basis of incident PAR
+    rd25 - Dark respiration at 25 degrees C (umol m-2 s-1)
+    tlk - leaf temperature, Kelvin
+    jmax - optimal rate of electron transport
+    vcopt - maximum rate of RuBP Carboxylase/oxygenase
+    iphoton - incident photosynthetically active photon flux (umols m-2 s-1)
 
-        gs - stomatal conductance (mols m-2 s-1), typically 0.01-0.20
-        pstat-station pressure, bars
-        aphoto - net photosynthesis  (umol m-2 s-1)
-        ps - gross photosynthesis (umol m-2 s-1)
-        aps - net photosynthesis (mg m-2 s-1)
-        aphoto (umol m-2 s-1)
+        note: Harley parameterized the model on the basis of incident PAR
 
+    gs - stomatal conductance (mols m-2 s-1), typically 0.01-0.20
+    pstat-station pressure, bars
+    aphoto - net photosynthesis  (umol m-2 s-1)
+    ps - gross photosynthesis (umol m-2 s-1)
+    aps - net photosynthesis (mg m-2 s-1)
+    aphoto (umol m-2 s-1)
 --------------------------------------------------
 
-        iphoton is radiation incident on leaves
+    iphoton is radiation incident on leaves
 
-        The temperature dependency of the kinetic properties of
-        RUBISCO are compensated for using the Arrhenius and
-        Boltzmann equations.  From biochemistry, one observes that
-        at moderate temperatures enzyme kinetic rates increase
-        with temperature.  At extreme temperatures enzyme
-        denaturization occurs and rates must decrease.
+    The temperature dependency of the kinetic properties of
+    RUBISCO are compensated for using the Arrhenius and
+    Boltzmann equations.  From biochemistry, one observes that
+    at moderate temperatures enzyme kinetic rates increase
+    with temperature.  At extreme temperatures enzyme
+    denaturization occurs and rates must decrease.
 
-        Arrhenius Eq.
+    Arrhenius Eq.
 
-        f(T)=f(tk_25) exp(tk -298)eact/(298 R tk)), where eact is the
-        activation energy.
+    f(T)=f(tk_25) exp(tk -298)eact/(298 R tk)), where eact is the
+    activation energy.
 
-        Boltzmann distribution
+    Boltzmann distribution
 
-        F(T)=tboltz)
+    F(T)=tboltz)
 
 
-        Define terms for calculation of gross photosynthesis, PG
+    Define terms for calculation of gross photosynthesis, PG
 
-        PG is a function of the minimum of RuBP saturated rate of
-        carboxylation, Wc, and the RuBP limited rate of carboxylation, Wj.
-        Wj is limiting when light is low and electron transport, which
-        re-generates RuBP, is limiting.  Wc is limiting when plenty of RuBP is
-        available compared to the CO2 that is needed for carboxylation.
+    PG is a function of the minimum of RuBP saturated rate of
+    carboxylation, Wc, and the RuBP limited rate of carboxylation, Wj.
+    Wj is limiting when light is low and electron transport, which
+    re-generates RuBP, is limiting.  Wc is limiting when plenty of RuBP is
+    available compared to the CO2 that is needed for carboxylation.
 
-        Both equations take the form:
+    Both equations take the form:
 
-        PG-photorespiration= (a CI-a d)/(e CI + b)
+    PG-photorespiration= (a CI-a d)/(e CI + b)
 
-        PG-photorespiration=min[Wj,Wc] (1-gamma_ps/Ci)
+    PG-photorespiration=min[Wj,Wc] (1-gamma_ps/Ci)
 
-        Wc=Vcmax Ci/(Ci + Kc(1+O2/Ko))
+    Wc=Vcmax Ci/(Ci + Kc(1+O2/Ko))
 
-        Wj=J Ci/(4 Ci + 8 gamma_ps)
+    Wj=J Ci/(4 Ci + 8 gamma_ps)
 
-        Ps kinetic coefficients from Harley at WBW.
+    Ps kinetic coefficients from Harley at WBW.
 
-        gamma_ps is the CO2 compensation point
+    gamma_ps is the CO2 compensation point
 
-        Jan 14, 1999 Updated the cubic solutions for photosynthesis.  There are
-        times when the restriction that R^2 < Q^3 is violated.  I therefore need
-        alternative algorithms to solve for the correct root.
+    Jan 14, 1999 Updated the cubic solutions for photosynthesis.  There are
+    times when the restriction that R^2 < Q^3 is violated.  I therefore need
+    alternative algorithms to solve for the correct root.
  
 ==============================================================*/
 
-void photosynthesis(temp_leaf_p, rad_leaf, e_air, g_lb_w, vc_opt, f_soilwater, b_h2o, m_h2o, cii, temp_leaf_c, LH_leaf, Gs_w, aphoto, ci)
-
-    double temp_leaf_p;  // It is temporay, will be removed later
-
-double rad_leaf;  // net shortwave radiation (W/m2)
-double e_air;     // water vapor pressure above canopy (kPa)
-double g_lb_w;    // leaf laminar boundary layer condunctance to H2O (m/s)
-double vc_opt;    // the maximum velocities of carboxylation of Rubisco at 25 deg C (umol m-2 s-1)
-
-double f_soilwater;  // an empirical scalar of soil water stress on stomatal conductance, dimensionless
-double b_h2o;        // the intercept term in BWB model (mol H2O m-2 s-1)
-double m_h2o;        // the slope in BWB model
-
-double cii;          // initial intercellular co2 concentration (ppm)
-double temp_leaf_c;  // leaf temperature (deg C)
-
-double LH_leaf;  // leaf latent heat flux (W m-2)
-
-double *Gs_w;    // stomatal conductance to water vapor (m s-1)
-double *aphoto;  // net photosynthesis rate (umol CO2 m-2 s-1)
-double *ci;      // intercellular co2 concentration (ppm)
-
+/**
+ * photosynthesis
+ * 
+ * @param temp_leaf_p double, It is temporay, will be removed later
+ * @param rad_leaf    double, net shortwave radiation (W/m2)
+ * @param e_air       double, water vapor pressure above canopy (kPa)
+ * @param g_lb_w      double, leaf laminar boundary layer condunctance to H2O (m/s)
+ *
+ * @param vc_opt      double, the maximum velocities of carboxylation of Rubisco at 25 deg C (umol m-2 s-1)
+ * @param f_soilwater double, an empirical scalar of soil water stress on stomatal conductance, dimensionless
+ * @param b_h2o       double, the intercept term in BWB model (mol H2O m-2 s-1)
+ * @param m_h2o       double, the slope in BWB model
+ * @param cii         double, initial intercellular co2 concentration (ppm)
+ * @param temp_leaf_c double, leaf temperature (deg C)
+ * @param LH_leaf     double, leaf latent heat flux (W m-2)
+ * 
+ * @param *Gs_w       double, stomatal conductance to water vapor (m s-1)
+ * @param *aphoto     double, net photosynthesis rate (umol CO2 m-2 s-1)
+ * @param *ci         double, intercellular co2 concentration (ppm)
+ */
+void photosynthesis(double temp_leaf_p, double rad_leaf, double e_air, double g_lb_w,
+                    double vc_opt, double f_soilwater, double b_h2o, double m_h2o, double cii, double temp_leaf_c, double LH_leaf,
+                    double *Gs_w, double *aphoto, double *ci)
 {
     double air_pres = 101.325;  // air pressure (kPa)
     double ca;                  // atmospheric co2 concentration (ppm)
@@ -218,7 +214,6 @@ double *ci;      // intercellular co2 concentration (ppm)
 
     /*      if(iphoton < 1)
 			iphoton = 0;*/
-
     gammac = 0.5 * o2 / tau * 1000.0;  // umol mol-1
 
     resp_ld25 = vc_opt * 0.004657;
@@ -228,27 +223,21 @@ double *ci;      // intercellular co2 concentration (ppm)
 
     resp_ld = TEMP_FUNC(resp_ld25, erd, tprime25, tk_25, temp_leaf_K);
 
-    //		jmopt = 29.1 + 1.64*vc_opt;
-
+    // jmopt = 29.1 + 1.64*vc_opt;
     jmopt = 2.39 * vc_opt - 14.2;
 
     jmax = TBOLTZ(jmopt, ejm, toptjm, temp_leaf_K);    // Apply temperature correction to JMAX
     vcmax = TBOLTZ(vc_opt, evc, toptvc, temp_leaf_K);  // Apply temperature correction to vcmax
 
     /***************************************
-
-        APHOTO = PG - resp_ld, net photosynthesis is the difference
-        between gross photosynthesis and dark respiration. Note
-        photorespiration is already factored into PG.
-
-****************************************
-
-/*
-        Gs from Ball-Berry is for water vapor.  It must be divided
-        by the ratio of the molecular diffusivities to be valid
-        for A
-*/
-
+    APHOTO = PG - resp_ld, net photosynthesis is the difference between gross
+    photosynthesis and dark respiration. Note photorespiration is already
+    factored into PG.
+    ****************************************/
+    /**
+     * Gs from Ball-Berry is for water vapor.  It must be divided by the ratio
+     * of the molecular diffusivities to be valid for A
+     */
     alpha_ps = 1.0 + (b_co2 / g_lb_c) - m_co2 * rh_leaf * f_soilwater;
     beta_ps = ca * (g_lb_c * m_co2 * rh_leaf * f_soilwater - 2.0 * b_co2 - g_lb_c);
     gamma_ps = ca * ca * g_lb_c * b_co2;
@@ -256,30 +245,24 @@ double *ci;      // intercellular co2 concentration (ppm)
 
     /*
         Test for the minimum of Wc and Wj.  Both have the form:
-
         W = (a ci - ad)/(e ci + b)
 
         after the minimum is chosen set a, b, e and d for the cubic solution.
-
         estimate of J according to Farquhar and von Cammerer (1981)
-*/
-
+    */
     /*     if (jmax > 0)
 			j_photon = qalpha * iphoton / sqrt(1. +(qalpha2 * iphoton * iphoton / (jmax * jmax)));
         else
 			j_photon = 0;*/
     //J photon from Harley
-
     j_photon = jmax * iphoton / (iphoton + 2.1 * jmax);
 
     // initial guess of intercellular CO2 concentration to estimate Wc and Wj:
     wj = j_photon * (cii - gammac) / (4. * cii + 8.0 * gammac);
-
     wc = vcmax * (cii - gammac) / (cii + bc);
 
     if (wj < wc) {
         // for Harley and Farquhar type model for Wj
-
         psguess = wj;
         a_ps = j_photon;
         b_ps = 8.0 * gammac;
@@ -292,17 +275,14 @@ double *ci;      // intercellular co2 concentration (ppm)
         e_ps = 1.0;
         d_ps = gammac;
     }
-
     //if wj or wc are less than resp_ld then A would probably be less than zero.  This would yield a
     // negative stomatal conductance.  In this case, assume gs equals the cuticular value. This
     // assumptions yields a quadratic rather than cubic solution for A
-
     if (wj <= resp_ld)
         goto quad;
 
     if (wc <= resp_ld)
         goto quad;
-
     //cubic solution:
     // A^3 + p A^2 + q A + r = 0
 
@@ -372,7 +352,6 @@ double *ci;      // intercellular co2 concentration (ppm)
 
     *aphoto = 0;
     // find out where roots plop down relative to the x-y axis
-
     if (minroot > 0 && midroot > 0 && maxroot > 0)
         *aphoto = minroot;
 
@@ -384,7 +363,6 @@ double *ci;      // intercellular co2 concentration (ppm)
 
     //also test for sucrose limitation of photosynthesis, as suggested by
     //Collatz.  Js=Vmax/2
-
     j_sucrose = vcmax / 2. - resp_ld;
 
     if (j_sucrose < *aphoto)
@@ -403,9 +381,7 @@ double *ci;      // intercellular co2 concentration (ppm)
         goto quad;
     else
         goto OUTDAT;
-
     // if aphoto < 0  set stomatal conductance to cuticle value
-
 quad:
     //a quadratic solution of A is derived if gs=b, but a cubic form occurs
     //if gs =ax + b.  Use quadratic case when A <=0
@@ -419,7 +395,6 @@ quad:
          Cquad = a_ps*(ca-d_ps) - resp_ld*(e_ps*ca+b_ps);
     */
     // original version
-
     ps_1 = ca * g_lb_c * b_co2;
     delta_1 = b_co2 + g_lb_c;
     denom = g_lb_c * b_co2;
@@ -436,31 +411,25 @@ quad:
 
 OUTDAT:
     *aphoto = max(0, *aphoto);
-
     cs = ca - *aphoto / g_lb_c;
 
     gs_h2o_mole = (f_soilwater * m_h2o * rh_leaf * *aphoto / cs) + b_h2o;  // mol m-2 s-1
     gs_co2_mole = gs_h2o_mole / 1.6;
 
     *ci = cs - *aphoto / gs_co2_mole;
-
     *Gs_w = gs_h2o_mole * temp_leaf_K * (met.pstat273);  // m s-1
 
     return;
 }
 
-/*----------------------------------------------------------------*/
-double SFC_VPD(double temp_leaf_K, double leleafpt)
-
-/* this function computes the relative humidity at the leaf surface for
- application in the Ball Berry Equation
- latent heat flux, LE, is passed through the function, mol m-2 s-1
- and it solves for the humidity at leaf surface
-
- es_leaf : saturation vapor pressure at leaf temperature.
-
-  ----------------------------------------------------------------*/
-{
+/** 
+ * This function computes the relative humidity at the leaf surface for
+ * application in the Ball Berry Equation latent heat flux, LE, is passed through 
+ * the function, mol m-2 s-1 and it solves for the humidity at leaf surface
+ * 
+ * es_leaf : saturation vapor pressure at leaf temperature.
+ */
+double SFC_VPD(double temp_leaf_K, double leleafpt) {
     double y, rhov_sfc, e_sfc, vpd_sfc, rhum_leaf;
     double es_leaf;
 
@@ -471,61 +440,40 @@ double SFC_VPD(double temp_leaf_K, double leleafpt)
     vpd_sfc = es_leaf - e_sfc;               // mb
     rhum_leaf = 1. - vpd_sfc / es_leaf;      // 0 to 1.0
     y = rhum_leaf;
-
     return y;
 }
 
-/*-------------------------------------------------------------------------------*/
-double TEMP_FUNC(double rate, double eact, double tprime, double tref, double t_lk)
-/*-------------------------------------------------------------------------------*/
-{
-    //  Arhennius temperature function
-
+/** Arhennius temperature function */
+double TEMP_FUNC(double rate, double eact, double tprime, double tref, double t_lk) {
     double y;
     y = rate * exp(tprime * eact / (tref * rugc * t_lk));
     return y;
 }
 
-/*----------------------------------------------------------------*/
-double LAMBDA(double tak)
-/*----------------------------------------------------------------*/
-{
-    // Latent heat of Vaporiation, J kg-1
-
+/** Latent heat of Vaporiation, J kg-1 */
+double LAMBDA(double tak) {
     double y;
-
     y = 3149000. - 2370. * tak;
-
     // add heat of fusion for melting ice
     if (tak < 273.)
         y += 333;
-
     return y;
 }
 
-/*----------------------------------------------------------------*/
-double ES(double t)
-
 // saturation vapor pressure function (mb)
 // T is temperature in Kelvin
-/*----------------------------------------------------------------*/
-{
+double ES(double t) {
     double y, y1;
-
     if (t > 0) {
         y1 = (54.8781919 - 6790.4985 / t - 5.02808 * log(t));
         y = exp(y1);
     } else
         printf("bad es calc");
-
     return y;
 }
 
-/*----------------------------------------------------------------*/
-double TBOLTZ(double rate, double eakin, double topt, double tl)
 // Boltzmann temperature distribution for photosynthesis
-/*----------------------------------------------------------------*/
-{
+double TBOLTZ(double rate, double eakin, double topt, double tl) {
     double y, dtlopt, prodt, numm, denom;
 
     dtlopt = tl - topt;

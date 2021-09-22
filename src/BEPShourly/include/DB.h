@@ -1,46 +1,44 @@
 
-#define PI180 0.017453292                       // pi divided by 180, radians per degree
+#define PI180 0.017453292  // pi divided by 180, radians per degree
 #define PI9 2.864788976
-#define PI2 6.283185307                         // 2 time pi
+#define PI2 6.283185307  // 2 time pi
 
- struct meteorology {
+struct meteorology {
+    double ustar;               // friction velocity, m s-1
+    double ustarnew;            // updated friction velocity with new H, m s-1
+    double rhova_g;             // absolute humidity, g m-3
+    double rhova_kg;            // absolute humidity, kg m-3
+    double sensible_heat_flux;  // sensible heat flux, W M-2
+    double H_old;               // old sensible heat flux, W m-2
+    double air_density;         // air density, kg m-3
+    double T_Kelvin;            // absolute air temperature, K
+    double press_kpa;           // station pressure, kPa
+    double press_bars;          // station pressure, bars
+    double press_Pa;            // pressure, Pa
+    double pstat273;            // gas constant computations
+    double air_density_mole;    // air density, mole m-3
+    double relative_humidity;   // relative humidity, ea/es(T)
+    double vpd;                 // vapor pressure deficit
+    double ir_in;               // infrared flux density
+} met;
 
-                double ustar;                   // friction velocity, m s-1
-                double ustarnew;                // updated friction velocity with new H, m s-1
-                double rhova_g;                 // absolute humidity, g m-3
-                double rhova_kg;                // absolute humidity, kg m-3
-                double sensible_heat_flux;      // sensible heat flux, W M-2
-                double H_old;                   // old sensible heat flux, W m-2              
-                double air_density;             // air density, kg m-3
-                double T_Kelvin;                // absolute air temperature, K
-                double press_kpa;               // station pressure, kPa
-                double press_bars;              // station pressure, bars
-                double press_Pa;                // pressure, Pa
-                double pstat273;                // gas constant computations
-                double air_density_mole;        // air density, mole m-3
-                double relative_humidity;       // relative humidity, ea/es(T)
-                double vpd;                     // vapor pressure deficit 
-				double ir_in;                   // infrared flux density
-                } met;
+// structure for plant and physical factors
 
- // structure for plant and physical factors
+struct factors {
+    double latent;    // latent heat of vaporization, J kg-1
+    double latent18;  // latent heat of vaporization times molecular mass of vapor, 18 g mol-1
+    double heatcoef;  // factor for sensible heat flux density
+    double a_filt;    // filter coefficients
+    double b_filt;    // filter coefficients
+    double co2;       // CO2 factor, ma/mc * rhoa (mole m-3)
 
-                struct factors {
-                double latent;      // latent heat of vaporization, J kg-1
-                double latent18;    // latent heat of vaporization times molecular mass of vapor, 18 g mol-1
-                double heatcoef;    // factor for sensible heat flux density
-                double a_filt;          // filter coefficients
-                double b_filt;      // filter coefficients
-                double co2;         // CO2 factor, ma/mc * rhoa (mole m-3)
-        
-        } fact;
+} fact;
 
- struct boundary_layer_resistances{
-                
-                double vapor;                   // resistance for water vapor, s/m
-                double heat;                    // resistance for heat, s/m
-                double co2;                     // resistance for CO2, s/m
-                } bound_layer_res;
+struct boundary_layer_resistances {
+    double vapor;  // resistance for water vapor, s/m
+    double heat;   // resistance for heat, s/m
+    double co2;    // resistance for CO2, s/m
+} bound_layer_res;
 
 void   TBOLTZdouble();
 double TEMP_FUNC();

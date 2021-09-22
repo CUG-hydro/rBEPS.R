@@ -144,7 +144,6 @@ int beps_c(char *inp_dir) {
         printf("\n Unable to open file <%s>,  exitting ...\n\n", outp_fn);
         exit(0);
     }
-
     printf("simulating ...  \n");
 
     /* DDDDD day loop bgn  DDDDD	*/
@@ -177,9 +176,7 @@ int beps_c(char *inp_dir) {
                 meteo->rh = 100 * es / esd;
 
             //  meteo->rh = hum;  // when reading in relative humidity
-
-            if (flag == 0)  // for 1st time step, to initialize var.
-            {
+            if (flag == 0) { // for 1st time step, to initialize var.
                 Init_Soil_Parameters(landcover, soil_type, parameter[27], p_soil);  // read soil parameters and set depth. LHE
                 p_soil->r_drainage = parameter[26];
                 Init_Soil_Status(p_soil, st, tem, sw, snowdepth);  // LHE
@@ -209,7 +206,6 @@ int beps_c(char *inp_dir) {
             plantresp(landcover, mid_res, lai_yr, lai, tem, temp_soil1, CosZs);
 
             /*  ---  soil respiration module  ---  */
-
             soilresp(Ccd, Cssd, Csmd, Cfsd, Cfmd, Csm, Cm, Cs, Cp, nppyr, coef, soil_type, p_soil, mid_res);
 
             /*  ---   writing output   ---  */
