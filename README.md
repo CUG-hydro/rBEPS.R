@@ -20,7 +20,7 @@ This is a basic example which shows you how to solve a common problem:
 
 ``` r
 library(rBEPS)
-beps("src/BEPShourly/examples/input")
+beps(system.file("examples/input", package = "rBEPS"))
 # simulating ...  
 # total GPP: 2128.598891   ET: 1164.599855        NEP: 982.954108
 ```

@@ -6,4 +6,4 @@
 *.exe
 *.so
 *.o
-*.txt
+# *.txt

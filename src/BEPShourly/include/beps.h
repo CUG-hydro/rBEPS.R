@@ -10,11 +10,12 @@
   Last update:  June 2015
 *****************************************************************************/
 
-#include <malloc.h>
+// #include <malloc.h> not work in mac, stdlib.h
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "soil.h"
 
 /* Define Constants */
 #define NOERROR		0
@@ -43,45 +44,6 @@
 #define rho_a		1.292   // densoty of air at 0C
 
 
-int beps_c(char *inp_dir);
-void readconf();
-void mid_prg();
-void readinput1();
-void readlai_d();
-void readlonlat();
-
-void inter_prg();
-// void s_coszs();
-void s_coszs(int jday, int j, float lat, float lon, double *CosZs);
-
-void aerodynamic_conductance();
-void plantresp();
-void Vcmax_Jmax();
-void netRadiation ();
-void soilresp();
-void lai2();
-void readparam(int lc, double parameter1[]);
-void readcoef(int lc, int stxt, double coef[]);
-
-void readhydr_param();
-void photosynthesis();
-void soil_water_factor();
-void Leaf_Temperatures();
-double Leaf_Temperature();
-
-void sensible_heat();
-void transpiration();
-void evaporation_canopy();
-void evaporation_soil();
-void rainfall_stage1();
-void rainfall_stage2();
-void rainfall_stage3();
-
-void meteo_pack();
-void surface_temperature();
-void snowpack_stage1();
-void snowpack_stage2();
-void snowpack_stage3();
 
 /*	Declare structures */
 struct climatedata
@@ -131,6 +93,53 @@ struct cpools
 	double Cs[3];
 	double Cp[3];
 	};
+
+/** FUNCTIONS *****************************************************************/
+int beps_c(char *inp_dir);
+void readconf();
+void mid_prg();
+void readinput1();
+void readlai_d();
+void readlonlat();
+
+// void s_coszs();
+void s_coszs(int jday, int j, float lat, float lon, double *CosZs);
+
+void readparam(int lc, double parameter1[]);
+void readcoef(int lc, int stxt, double coef[]);
+
+// void inter_prg();
+void inter_prg(int jday, int rstep, double lai, double clumping,
+    double parameter[], struct climatedata meteo[],
+    double CosZs, double var_o[], double var_n[],
+    struct Soil soilp[], struct results mid_res[]);
+
+void aerodynamic_conductance();
+void plantresp();
+void Vcmax_Jmax();
+void netRadiation ();
+void soilresp();
+void lai2();
+
+void readhydr_param();
+void photosynthesis();
+void soil_water_factor();
+void Leaf_Temperatures();
+double Leaf_Temperature();
+
+void sensible_heat();
+void transpiration();
+void evaporation_canopy();
+void evaporation_soil();
+void rainfall_stage1();
+void rainfall_stage2();
+void rainfall_stage3();
+
+void meteo_pack();
+void surface_temperature();
+void snowpack_stage1();
+void snowpack_stage2();
+void snowpack_stage3();
 
 /*	Declare global variables */
 short lc_no;

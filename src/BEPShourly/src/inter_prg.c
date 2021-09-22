@@ -8,17 +8,10 @@ Last update:	July, 2015
 #include "beps.h"
 #include "soil.h"
 
-void inter_prg(jday, rstep, lai, clumping, parameter, meteo, CosZs, var_o, var_n, soilp, mid_res)
-
-    int jday,
-    rstep;
-double lai, clumping;
-double parameter[];
-struct climatedata meteo[];
-double CosZs;
-double var_o[], var_n[];
-struct Soil soilp[];
-struct results mid_res[];
+void inter_prg(int jday, int rstep, double lai, double clumping,
+    double parameter[], struct climatedata meteo[],
+    double CosZs, double var_o[], double var_n[],
+    struct Soil soilp[], struct results mid_res[])
 {
     int num, kkk;
     int landcover;

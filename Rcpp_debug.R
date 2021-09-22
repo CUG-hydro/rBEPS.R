@@ -1,2 +1,2 @@
 devtools::load_all()
-beps("src/BEPShourly/examples/input")
+beps(system.file("examples/input", package = "rBEPS"))
