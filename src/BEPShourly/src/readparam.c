@@ -7,21 +7,22 @@
 
 #include "beps.h"
 
-// @param lc
-// case 1:  /* conifer evergreen */
-// case 2:  /* conifer decidous */
-// case 6:  /* broadleaf deciduous */
-// case 9:  /* broadleaf evergreen forest */
-// case 13: /* shrub  */
-// case 40: /* C4 plants  */
-// /* others landcover */
-void readparam(lc, parameter1)
+/**
+ * readparam
+ * 
+ * @param lc landcover code:
+ * -  `1`: conifer evergreen
+ * -  `2`: conifer decidous
+ * -  `6`: broadleaf deciduous
+ * -  `9`: broadleaf evergreen forest
+ * - `13`: shrub
+ * - `40`: C4 plants
+ * - `others`
+ * @param parameter1 A double array, with the length of 48.
+ */
+void readparam(int lc, double parameter1[]) {
 
-    short lc;
-double parameter1[];
-{
     parameter1[4] = lc; /*   landcover */
-
     switch (lc) {
         case 1:                     /* conifer evergreen */
             parameter1[2] = 0.62;   /* clumping_index  */

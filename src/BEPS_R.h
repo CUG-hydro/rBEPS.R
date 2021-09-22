@@ -13,15 +13,27 @@ extern "C" {
 
 // #define VIC_DRIVER "R"
 
-// //' Calculating cosZ
-// //' @param j hour of day
-// //' @export
-// // [[Rcpp::export]]
-// double s_coszs(int jday, int j, double lat, double lon){
-//     double CosZs;
-//     s_coszs(jday, j, lat, lon, &CosZs);
-//     return CosZs;
-// }
+//' Calculating cosZ
+//' @param j hour of day
+//' @export
+// [[Rcpp::export]]
+double s_coszs_R(int jday, int j, double lat, double lon){
+    double CosZs;
+    s_coszs(jday, j, lat, lon, &CosZs);
+    return CosZs;
+}
+
+//' @export
+// [[Rcpp::export]]
+NumericVector readcoef_R(int lc, int stxt) {
+    const int N = 48;
+    NumericVector ans(N);
+    double coef[N];
+    readcoef(lc, stxt, coef); // 传递数组works
+    for(int i = 0; i < N; i++) 
+        ans[i] = coef[i];
+    return ans;
+}
 
 //' @export
 // [[Rcpp::export]]

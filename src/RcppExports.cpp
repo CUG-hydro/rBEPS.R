@@ -5,6 +5,37 @@
 
 using namespace Rcpp;
 
+#ifdef RCPP_USE_GLOBAL_ROSTREAM
+Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
+Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
+#endif
+
+// s_coszs_R
+double s_coszs_R(int jday, int j, double lat, double lon);
+RcppExport SEXP _rBEPS_s_coszs_R(SEXP jdaySEXP, SEXP jSEXP, SEXP latSEXP, SEXP lonSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type jday(jdaySEXP);
+    Rcpp::traits::input_parameter< int >::type j(jSEXP);
+    Rcpp::traits::input_parameter< double >::type lat(latSEXP);
+    Rcpp::traits::input_parameter< double >::type lon(lonSEXP);
+    rcpp_result_gen = Rcpp::wrap(s_coszs_R(jday, j, lat, lon));
+    return rcpp_result_gen;
+END_RCPP
+}
+// readcoef_R
+NumericVector readcoef_R(int lc, int stxt);
+RcppExport SEXP _rBEPS_readcoef_R(SEXP lcSEXP, SEXP stxtSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type lc(lcSEXP);
+    Rcpp::traits::input_parameter< int >::type stxt(stxtSEXP);
+    rcpp_result_gen = Rcpp::wrap(readcoef_R(lc, stxt));
+    return rcpp_result_gen;
+END_RCPP
+}
 // beps
 int beps(String inp_dir);
 RcppExport SEXP _rBEPS_beps(SEXP inp_dirSEXP) {
@@ -18,6 +49,8 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
+    {"_rBEPS_s_coszs_R", (DL_FUNC) &_rBEPS_s_coszs_R, 4},
+    {"_rBEPS_readcoef_R", (DL_FUNC) &_rBEPS_readcoef_R, 2},
     {"_rBEPS_beps", (DL_FUNC) &_rBEPS_beps, 1},
     {NULL, NULL, 0}
 };

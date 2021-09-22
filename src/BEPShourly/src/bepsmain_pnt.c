@@ -237,6 +237,5 @@ int beps_c(char *inp_dir) {
     // free(var_o);
     // free(var_n);
     // free(outp);
-
     return 1;
 } /* end of main */

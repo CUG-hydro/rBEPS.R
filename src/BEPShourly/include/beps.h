@@ -51,15 +51,18 @@ void readlai_d();
 void readlonlat();
 
 void inter_prg();
-void s_coszs();
+// void s_coszs();
+void s_coszs(int jday, int j, float lat, float lon, double *CosZs);
+
 void aerodynamic_conductance();
 void plantresp();
 void Vcmax_Jmax();
 void netRadiation ();
 void soilresp();
-void readparam();
 void lai2();
-void readcoef();
+void readparam(int lc, double parameter1[]);
+void readcoef(int lc, int stxt, double coef[]);
+
 void readhydr_param();
 void photosynthesis();
 void soil_water_factor();

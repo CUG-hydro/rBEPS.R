@@ -7,12 +7,8 @@
 
 #include "beps.h"
 
-void readcoef(lc, stxt, coef)
+void readcoef(int lc, int stxt, double coef[48]) {
 
-    int short lc;
-int stxt;
-double coef[50];
-{
     double lignion_leaf, lignion_fr, lignion_wd, clay1, clay_silt1;
 
     switch (stxt) {
