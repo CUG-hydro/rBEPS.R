@@ -1,4 +1,4 @@
-#include "BEPS_R.h"
+#include "rBEPS.h"
 // #include <Rcpp.h>
 // using namespace Rcpp;
 

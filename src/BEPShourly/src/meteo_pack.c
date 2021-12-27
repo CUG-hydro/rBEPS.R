@@ -34,12 +34,13 @@ void meteo_pack(double temp, double rh, double* meteo_pack_output) {
     latent_water = (2.501 - 0.00237 * temp) * 1000000;
     //psy=cp_air*101.13/(0.622*latent_water);
 
-    meteo_pack_output[1] = density_air;
-    meteo_pack_output[2] = cp_air;
-    meteo_pack_output[3] = vpd;
-    meteo_pack_output[4] = slope_vapor;
-    meteo_pack_output[5] = psy;
-    meteo_pack_output[6] = e_saturate;
-    meteo_pack_output[7] = e_actual;
-    meteo_pack_output[8] = sp_humidity;
+    meteo_pack_output[0] = latent_water;// J kg-1
+    meteo_pack_output[1] = density_air; // 1.293 kg m-3
+    meteo_pack_output[2] = cp_air;      // J kg-1 degC-1
+    meteo_pack_output[3] = vpd;         // kPa
+    meteo_pack_output[4] = slope_vapor; // kPa degC-1 
+    meteo_pack_output[5] = psy;         // kPa degC-1 
+    meteo_pack_output[6] = e_saturate;  // kPa
+    meteo_pack_output[7] = e_actual;    // kPa
+    meteo_pack_output[8] = sp_humidity; // kg/kg
 }

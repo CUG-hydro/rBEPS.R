@@ -4,22 +4,25 @@
 /// BEPS 4.01 for a point, to simulate carbon fluxes, energy fluxes and soil water...
 
 #include "beps.h"
-#include "soil.h"
 
 /// @brief Main driver function of BEPS
 int beps_c(char *inp_dir) {
     int jday, rstep, dd, tt, flag, i;
     int landcover, soil_type;
     float lai_p[366];
-    float lon, lat, nppyr, lai_yr;
+    float lon, lat;
     float lcv, stypev, stv, swv, sdpv;
+    
     float ccdv, cssdv, csmdv, cfsdv, cfmdv, csmv, cmv, csv, cpv;
     float rv, tv, hv, pv, wv, civ;
     float m_rad[366][25], m_tem[366][25], m_hum[366][25], m_pre[366][25], m_wind[366][25];
     double tem, hum, st, sw, snowdepth, temp_soil1, temp_soil[layer + 1];
-    double Ccd[5], Cssd[5], Csmd[5], Cfsd[5], Cfmd[5], Csm[5], Cm[5], Cs[5], Cp[5];
-    double lai, clumping;
 
+    double lai, clumping;
+    // parameters for respiration
+    // float nppyr, lai_yr;
+    // double Ccd[5], Cssd[5], Csmd[5], Cfsd[5], Cfmd[5], Csm[5], Cm[5], Cs[5], Cp[5];
+    
     char site[33], lc_fn[70], cp_fn[70], lai_fn[60], me_fn[60], outp_fn[80];
     FILE *lc_ptr, *cp_ptr, *laif_ptr, *me_ptr, *outp_ptr;
 
@@ -82,28 +85,28 @@ int beps_c(char *inp_dir) {
     // Close basic info files
     fclose(lc_ptr);
 
-    // Open carbon pools files
-    if ((cp_ptr = fopen(cp_fn, "r")) == NULL) {
-        printf("\nUnable to open data2 file (carbon pool), exiting program...\n");
-        exit(0);
-    }
+    // // Open carbon pools files
+    // if ((cp_ptr = fopen(cp_fn, "r")) == NULL) {
+    //     printf("\nUnable to open data2 file (carbon pool), exiting program...\n");
+    //     exit(0);
+    // }
 
-    // Read ann_LAI and ann_npp for each pix
-    fscanf(cp_ptr, "%f %f ", &lai_yr, &nppyr);
+    // // Read ann_LAI and ann_npp for each pix
+    // fscanf(cp_ptr, "%f %f ", &lai_yr, &nppyr);
 
-    // Read carbon pools data for each pix
-    fscanf(cp_ptr, "%f %f %f %f %f %f %f %f %f ", &ccdv, &cssdv, &csmdv, &cfsdv, &cfmdv, &csmv, &cmv, &csv, &cpv);
-    Ccd[0] = ccdv * 1000;
-    Cssd[0] = cssdv * 1000;
-    Csmd[0] = csmdv * 1000;
-    Cfsd[0] = cfsdv * 1000;
-    Cfmd[0] = cfmdv * 1000;
-    Csm[0] = csmv * 1000;
-    Cm[0] = cmv * 1000;
-    Cs[0] = csv * 1000;
-    Cp[0] = cpv * 1000;
-    // Close carbon pools files
-    fclose(cp_ptr);
+    // // Read carbon pools data for each pix
+    // fscanf(cp_ptr, "%f %f %f %f %f %f %f %f %f ", &ccdv, &cssdv, &csmdv, &cfsdv, &cfmdv, &csmv, &cmv, &csv, &cpv);
+    // Ccd[0] = ccdv * 1000;
+    // Cssd[0] = cssdv * 1000;
+    // Csmd[0] = csmdv * 1000;
+    // Cfsd[0] = cfsdv * 1000;
+    // Cfmd[0] = cfmdv * 1000;
+    // Csm[0] = csmv * 1000;
+    // Cm[0] = cmv * 1000;
+    // Cs[0] = csv * 1000;
+    // Cp[0] = cpv * 1000;
+    // // Close carbon pools files
+    // fclose(cp_ptr);
 
     // Open lai files
     if ((laif_ptr = fopen(lai_fn, "r")) == NULL) {
@@ -212,12 +215,13 @@ int beps_c(char *inp_dir) {
             // Store updated variables array in temp array
             for (i = 0; i <= 40; i++) v2last[i] = var_n[i];
 
+            /** CLOSE respiration module */
             /***** plant respiration/NPP module *****/
-            temp_soil1 = p_soil->temp_soil_c[1];
-            plantresp(landcover, mid_res, lai_yr, lai, tem, temp_soil1, CosZs);
+            // temp_soil1 = p_soil->temp_soil_c[1];
+            // plantresp(landcover, mid_res, lai_yr, lai, tem, temp_soil1, CosZs);
 
             /***** soil respiration module *****/
-            soilresp(Ccd, Cssd, Csmd, Cfsd, Cfmd, Csm, Cm, Cs, Cp, nppyr, coef, soil_type, p_soil, mid_res);
+            // soilresp(Ccd, Cssd, Csmd, Cfsd, Cfmd, Csm, Cm, Cs, Cp, nppyr, coef, soil_type, p_soil, mid_res);
 
             /***** save data for output *****/
             // Hourly output

@@ -9,7 +9,7 @@
 /// @brief Function to set soil coefficients
 /// @param  lc    land cover type
 ///               1-ENF 2-DNF 6-DBF 9-EBF 13-Shrub 40-C4 Plants default:Others
-/// @param  stxt  soil texture
+/// @param  stxt  soil texture, 1-11
 /// @param  coef  soil coefficients array
 /// @return void
 void readcoef(int short lc, int stxt, double* coef) {

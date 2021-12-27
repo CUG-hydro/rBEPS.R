@@ -10,9 +10,56 @@ Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
 Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
-// s_coszs_R
-double s_coszs_R(int jday, int j, double lat, double lon);
-RcppExport SEXP _rBEPS_s_coszs_R(SEXP jdaySEXP, SEXP jSEXP, SEXP latSEXP, SEXP lonSEXP) {
+// Leaf_Temperature_
+double Leaf_Temperature_(double Tair, double VPD_air, double Cp_ca, double Gw, double Gww, double Gh, double Xc_sl, double radiation, bool constrain);
+RcppExport SEXP _rBEPS_Leaf_Temperature_(SEXP TairSEXP, SEXP VPD_airSEXP, SEXP Cp_caSEXP, SEXP GwSEXP, SEXP GwwSEXP, SEXP GhSEXP, SEXP Xc_slSEXP, SEXP radiationSEXP, SEXP constrainSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type Tair(TairSEXP);
+    Rcpp::traits::input_parameter< double >::type VPD_air(VPD_airSEXP);
+    Rcpp::traits::input_parameter< double >::type Cp_ca(Cp_caSEXP);
+    Rcpp::traits::input_parameter< double >::type Gw(GwSEXP);
+    Rcpp::traits::input_parameter< double >::type Gww(GwwSEXP);
+    Rcpp::traits::input_parameter< double >::type Gh(GhSEXP);
+    Rcpp::traits::input_parameter< double >::type Xc_sl(Xc_slSEXP);
+    Rcpp::traits::input_parameter< double >::type radiation(radiationSEXP);
+    Rcpp::traits::input_parameter< bool >::type constrain(constrainSEXP);
+    rcpp_result_gen = Rcpp::wrap(Leaf_Temperature_(Tair, VPD_air, Cp_ca, Gw, Gww, Gh, Xc_sl, radiation, constrain));
+    return rcpp_result_gen;
+END_RCPP
+}
+// lai2_
+NumericVector lai2_(double clumping, double CosZs, double stem_o, double stem_u, double lai_o, double lai_u);
+RcppExport SEXP _rBEPS_lai2_(SEXP clumpingSEXP, SEXP CosZsSEXP, SEXP stem_oSEXP, SEXP stem_uSEXP, SEXP lai_oSEXP, SEXP lai_uSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type clumping(clumpingSEXP);
+    Rcpp::traits::input_parameter< double >::type CosZs(CosZsSEXP);
+    Rcpp::traits::input_parameter< double >::type stem_o(stem_oSEXP);
+    Rcpp::traits::input_parameter< double >::type stem_u(stem_uSEXP);
+    Rcpp::traits::input_parameter< double >::type lai_o(lai_oSEXP);
+    Rcpp::traits::input_parameter< double >::type lai_u(lai_uSEXP);
+    rcpp_result_gen = Rcpp::wrap(lai2_(clumping, CosZs, stem_o, stem_u, lai_o, lai_u));
+    return rcpp_result_gen;
+END_RCPP
+}
+// meteo_pack_
+NumericVector meteo_pack_(double temp, double rh);
+RcppExport SEXP _rBEPS_meteo_pack_(SEXP tempSEXP, SEXP rhSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type temp(tempSEXP);
+    Rcpp::traits::input_parameter< double >::type rh(rhSEXP);
+    rcpp_result_gen = Rcpp::wrap(meteo_pack_(temp, rh));
+    return rcpp_result_gen;
+END_RCPP
+}
+// s_coszs_
+double s_coszs_(int jday, int j, double lat, double lon);
+RcppExport SEXP _rBEPS_s_coszs_(SEXP jdaySEXP, SEXP jSEXP, SEXP latSEXP, SEXP lonSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -20,19 +67,19 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< int >::type j(jSEXP);
     Rcpp::traits::input_parameter< double >::type lat(latSEXP);
     Rcpp::traits::input_parameter< double >::type lon(lonSEXP);
-    rcpp_result_gen = Rcpp::wrap(s_coszs_R(jday, j, lat, lon));
+    rcpp_result_gen = Rcpp::wrap(s_coszs_(jday, j, lat, lon));
     return rcpp_result_gen;
 END_RCPP
 }
-// readcoef_R
-NumericVector readcoef_R(int lc, int stxt);
-RcppExport SEXP _rBEPS_readcoef_R(SEXP lcSEXP, SEXP stxtSEXP) {
+// readcoef_
+NumericVector readcoef_(int lc, int stxt);
+RcppExport SEXP _rBEPS_readcoef_(SEXP lcSEXP, SEXP stxtSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< int >::type lc(lcSEXP);
     Rcpp::traits::input_parameter< int >::type stxt(stxtSEXP);
-    rcpp_result_gen = Rcpp::wrap(readcoef_R(lc, stxt));
+    rcpp_result_gen = Rcpp::wrap(readcoef_(lc, stxt));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -49,8 +96,11 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_rBEPS_s_coszs_R", (DL_FUNC) &_rBEPS_s_coszs_R, 4},
-    {"_rBEPS_readcoef_R", (DL_FUNC) &_rBEPS_readcoef_R, 2},
+    {"_rBEPS_Leaf_Temperature_", (DL_FUNC) &_rBEPS_Leaf_Temperature_, 9},
+    {"_rBEPS_lai2_", (DL_FUNC) &_rBEPS_lai2_, 6},
+    {"_rBEPS_meteo_pack_", (DL_FUNC) &_rBEPS_meteo_pack_, 2},
+    {"_rBEPS_s_coszs_", (DL_FUNC) &_rBEPS_s_coszs_, 4},
+    {"_rBEPS_readcoef_", (DL_FUNC) &_rBEPS_readcoef_, 2},
     {"_rBEPS_beps", (DL_FUNC) &_rBEPS_beps, 1},
     {NULL, NULL, 0}
 };

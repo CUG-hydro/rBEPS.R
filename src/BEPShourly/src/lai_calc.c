@@ -5,6 +5,8 @@
 
 #include "beps.h"
 
+// int LC, 
+
 /// @brief Function to recalculate sunlit and shaded leaf area index
 /// @param  stem_o        overstory woody area
 /// @param  stem_u        understory woody area
@@ -22,7 +24,7 @@
 /// @param  PAI_u_sunlit  understory sunlit lai
 /// @param  PAI_u_shaded  understory shaded lai
 /// @return void
-void lai2(double stem_o, double stem_u, int LC, double CosZs, double lai_o, double clumping, double lai_u,
+void lai2(double clumping, double CosZs, double stem_o, double stem_u, double lai_o, double lai_u,
           double* lai_o_sunlit, double* lai_o_shaded, double* lai_u_sunlit, double* lai_u_shaded,
           double* PAI_o_sunlit, double* PAI_o_shaded, double* PAI_u_sunlit, double* PAI_u_shaded) {
     if (CosZs > 0)

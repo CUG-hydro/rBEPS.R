@@ -88,7 +88,7 @@ void inter_prg(int jday, int rstep, double lai, double clumping,
     double ip = 0;  // the cumulative infiltration at the time of ponding   --in m/s
     double Inf = 0;
     double zr = 0.8;
-    double Cpd = 1004.65;
+    double Cpd = 1004.65;   // 1013 J kg-1 degC-1
     double rho_w = 1025.0;  // density of water
 
     double Cs_o_sunlit_old, Cs_o_shaded_old, Cs_u_sunlit_old, Cs_u_shaded_old;  // CO2 concentration on the surfaces of leaves
@@ -196,7 +196,8 @@ void inter_prg(int jday, int rstep, double lai, double clumping,
 
     // lai_calc module
     // separate lai into sunlit and shaded portions
-    lai2(stem_o, stem_u, landcover, CosZs, lai_o, clumping, lai_u, &LAIo_sunlit, &LAIo_shaded, &LAIu_sunlit,
+    // landcover, 
+    lai2(clumping, CosZs, stem_o, stem_u, lai_o, lai_u, &LAIo_sunlit, &LAIo_shaded, &LAIu_sunlit,
          &LAIu_shaded, &LAI_o_sunlit, &LAI_o_shaded, &LAI_u_sunlit, &LAI_u_shaded);
 
     /*****  Initialization of this time step  *****/

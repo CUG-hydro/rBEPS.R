@@ -10,6 +10,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h> 
 
 #include "soil.h"
 
@@ -124,10 +125,10 @@ void soilresp(double* Ccd, double* Cssd, double* Csmd, double* Cfsd, double* Cfm
 void readparam(short lc, double parameter1[]);
 void readcoef(short lc, int stxt, double coef[]);
 
-void lai2(double stem_o, double stem_u, int LC, double CosZs, double lai_o, double clumping, double lai_u,
+// int LC, 
+void lai2(double clumping, double CosZs, double stem_o, double stem_u, double lai_o, double lai_u,
           double* lai_o_sunlit, double* lai_o_shaded, double* lai_u_sunlit, double* lai_u_shaded,
           double* PAI_o_sunlit, double* PAI_o_shaded, double* PAI_u_sunlit, double* PAI_u_shaded);
-
 
 void readhydr_param();
 
@@ -144,7 +145,7 @@ void Leaf_Temperatures(double Tair, double slope, double psychrometer, double VP
                        double* Tc_o_sunlit, double* Tc_o_shaded, double* Tc_u_sunlit, double* Tc_u_shaded);
 
 double Leaf_Temperature(double Tair, double slope, double psychrometer, double VPD_air, double Cp_ca,
-                        double Gw, double Gww, double Gh, double Xcs, double Xcl, double radiation);
+                        double Gw, double Gww, double Gh, double Xc_sl, double radiation, bool constrain);
 
 void sensible_heat(double tempL_o_sunlit, double tempL_o_shaded, double tempL_u_sunlit, double tempL_u_shaded,
                    double temp_g, double temp_air, double rh_air,
