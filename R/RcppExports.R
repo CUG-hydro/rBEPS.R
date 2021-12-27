@@ -4,13 +4,22 @@
 #' Calculating cosZ
 #' @param j hour of day
 #' @export
-s_coszs_R <- function(jday, j, lat, lon) {
-    .Call(`_rBEPS_s_coszs_R`, jday, j, lat, lon)
+#' @examples
+#' S_coszs(1, 1, 15, 120)
+S_coszs <- function(jday, j, lat, lon) {
+    .Call(`_rBEPS_S_coszs`, jday, j, lat, lon)
 }
 
+#' Real soil coefficients
+#'
+#' @param lc    land cover type
+#'               1-ENF 2-DNF 6-DBF 9-EBF 13-Shrub 40-C4 Plants default:Others
+#' @param stxt  soil texture, 1-11
 #' @export
-readcoef_R <- function(lc, stxt) {
-    .Call(`_rBEPS_readcoef_R`, lc, stxt)
+#' @examples
+#' Readcoef(1, 1)
+Readcoef <- function(lc, stxt) {
+    .Call(`_rBEPS_Readcoef`, lc, stxt)
 }
 
 #' @export
