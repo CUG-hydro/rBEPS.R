@@ -1,26 +1,24 @@
-/*********************************************************************
-----------------------------
-Program: SOIL_WATER_FACTOR.C
-Version 2.0
-----------------------------
-Description:  Compute soil water stress factor. please refer to file soil_water_factor.cpp for
-the orginal version. LHE.
+/// @file soil_water_stress.c
+/// @brief Compute soil water stress factor.
+/// @note Please refer to file soil_water_factor.cpp for the original version. LHE.
+/// @version 2.0
+/// @authors Rewritten by: Liming He. Jan 29, 2013.
+/// @authors Modified by: Mustapha El Maayar. March 2008
+/// @authors Written by: Weimin Ju
+/// @authors Last revision by: Liming He.
+/// @date May 22, 2015.
 
-Last revision by LHE. May 22, 2015. 
-Rewritten by: Liming He. Jan 29, 2013.
-Modified by: Mustapha El Maayar - March 2008
-Written by: Weiming Ju
-*********************************************************************/
 #include <math.h>
-#include "stdio.h"
-#include "stdlib.h"
-#include "soil.h"  // added by LHE.
-// #include "debug.h"
+#include <stdio.h>
 
-/********************************************************************/
-void soil_water_factor_v2(struct Soil p[])
-// output:  dt, fw; LHE. Jan 29. 2013.
-{
+#include "debug.h"
+#include "soil.h"
+
+/// @brief Function to compute soil water stress factor
+/// @details [output] dt, fw-soil water stress
+/// @param  p  soil conditions struct
+/// @return void
+void soil_water_factor_v2(struct Soil p[]) {
     double ft[MAX_LAYERS], fpsisr[MAX_LAYERS];
     double dtt[MAX_LAYERS];
     double t1, t2;
@@ -42,8 +40,7 @@ void soil_water_factor_v2(struct Soil p[])
         else
             fpsisr[i] = 1.0;
 
-		// using a previous temperature | soil water factor is calculated before Tm is updated. LHE.
-        if (p->temp_soil_p[i] > 0.0) 
+        if (p->temp_soil_p[i] > 0.0)                               // using a previous temperature | soil water factor is calculated before Tm is updated. LHE.
             ft[i] = (1.0 - exp(t1 * pow(p->temp_soil_p[i], t2)));  // 1/x
         else
             ft[i] = 0.0;
@@ -70,8 +67,8 @@ void soil_water_factor_v2(struct Soil p[])
     else {
         for (i = 0; i < p->n_layer; i++) {
             p->dt[i] = dtt[i] / dtt_sum;
-            //		if (p->dt[0] < 0.0000001)
-            //			printf("%f\n", p->dt[0]);
+            // if (p->dt[0] < 0.0000001)
+            // printf("%f\n", p->dt[0]);
             if (isnan(p->dt[i]))
                 printf("%f\n", p->dt[0]);
         }
@@ -82,6 +79,7 @@ void soil_water_factor_v2(struct Soil p[])
         }
         p->f_soilwater = max(0.1, fpsisr_sum);
     }
+    // in-process value check
     //printf("fpsisr[0]=%f\n",fpsisr[0]);
 }
 

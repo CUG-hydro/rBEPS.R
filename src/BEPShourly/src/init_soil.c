@@ -1,32 +1,20 @@
+/// @file init_soil.c
+/// @brief Module for soil parameters and status initialization
+/// @author Liming He
+/// @date June 2, 2015
+
 #include <math.h>
 
 #include "soil.h"
 
-// Liming He
-// June 2, 2015
-
-// function:
-// (1) set the depth for each layer
-// (2) set the parameters for each layer
-
-/**
- * Init_Soil_Parameters
- * @param landcover 
- * @param stxt
- * case 1: sand
- * case 2: loamy sand
- * case 3: sandy loam
- * case 4: loam
- * case 5: silty loam
- * case 6: sandy caly loam
- * case 7: clay loam
- * case 8: silty clay loam
- * case 9: sandy clay
- * case 10: silty clay
- * case 11: clay
- * default
- * @param r_root_decay decay_rate_of_root_distribution
- */
+/// @brief Function to initialize soil parameters
+/// @details [1] Set the depth for each layer
+/// @details [2] Set the parameters for each layer
+/// @param  landcover     land cover type
+/// @param  stxt          soil texture
+/// @param  r_root_decay  decay rate of root distribution
+/// @param  p             Soil struct variable
+/// @return void
 void Init_Soil_Parameters(int landcover, int stxt, double r_root_decay, struct Soil p[]) {
     p->n_layer = 5;
 
@@ -98,7 +86,7 @@ void Init_Soil_Parameters(int landcover, int stxt, double r_root_decay, struct S
             p->psi_sat[4] = 0.12; /* water potential at sat */
             break;
 
-        case 2:  //loamy sand
+        case 2:  // loamy sand
             p->b[0] = 2.1;
             p->b[1] = 2.3;
             p->b[2] = 2.5;
@@ -250,7 +238,7 @@ void Init_Soil_Parameters(int landcover, int stxt, double r_root_decay, struct S
             p->psi_sat[4] = 0.26;
             break;
 
-        case 6:  // sandy caly loam
+        case 6:  // sandy clay loam
             p->b[0] = 4.0;
             p->b[1] = 4.2;
             p->b[2] = 4.4;
@@ -517,12 +505,15 @@ void Init_Soil_Parameters(int landcover, int stxt, double r_root_decay, struct S
     }
 }
 
-// Init. the soil status:
-//	soil temperatures and moistures for each layer.
-//	ponded water, snow depth et al.
-
-// Liming He, Jun. 2, 2015
-
+/// @brief Function to initialize the soil status:
+///        soil temperature and moisture for each layer,
+///        ponded water, snow depth, et al.
+/// @param  p          Soil struct variable
+/// @param  Tsoil      soil temperature
+/// @param  Tair       air temperature
+/// @param  Ms         soil water content
+/// @param  snowdepth  snow depth
+/// @return void
 void Init_Soil_Status(struct Soil p[], double Tsoil, double Tair, double Ms, double snowdepth) {
     int i;
     double d_t = Tsoil - Tair;
@@ -570,10 +561,9 @@ void Init_Soil_Status(struct Soil p[], double Tsoil, double Tair, double Ms, dou
     }
 }
 
-// funtion rewritten by LHE.  Jan 31, 2013.
-// Last revision: May 16, 2015
-// This function calculates the fraction of root in the soil for each soil layer.
-
+/// @brief Function to calculate the fraction of root in the soil for each soil layer
+/// @param  soil  Soil struct variable
+/// @return void
 void SoilRootFraction(struct Soil soil[]) {
     int i;
     double cum_depth[MAX_LAYERS];

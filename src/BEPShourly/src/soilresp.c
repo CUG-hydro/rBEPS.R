@@ -1,29 +1,28 @@
-/*************************************************************************
-    soilresp.c
+/// @file soilresp.c
+/// @brief This module is to calculate soil respiration.
 
-	Calculating soil respiration.
-*****************************************************************************/
 #include "beps.h"
 #include "soil.h"
 
-void soilresp(Ccd, Cssd, Csmd, Cfsd, Cfmd, Csm, Cm, Cs, Cp, npp_yr, coef, soiltype, soilp, mid_res)
-
-    double *Ccd;
-double *Cssd;
-double *Csmd;
-double *Cfsd;
-double *Cfmd;
-double *Csm;
-double *Cm;
-double *Cs;
-double *Cp;
-float npp_yr;
-double *coef;
-int soiltype;
-struct Soil *soilp;
-struct results *mid_res;
-
-{
+/// @brief Function to calculate soil respiration
+/// @param Ccd       carbon pool variable
+/// @param Cssd      ...
+/// @param Csmd      ...
+/// @param Cfsd      ...
+/// @param Cfmd      ...
+/// @param Csm       ...
+/// @param Cm        ...
+/// @param Cs        ...
+/// @param Cp        ...
+/// @param npp_yr    a fraction of NPP transferred to biomass carbon pools
+/// @param coef      soil coefficients array
+/// @param soiltype  soil type
+/// @param soilp     soil variables struct
+/// @param mid_res   results struct
+/// @return void
+void soilresp(double* Ccd, double* Cssd, double* Csmd, double* Cfsd, double* Cfmd,
+              double* Csm, double* Cm, double* Cs, double* Cp, float npp_yr, double* coef,
+              int soiltype, struct Soil* soilp, struct results* mid_res) {
     double fw, fcr, fl, ffr;
     double kw_cd, kcr_cd;
     double kl_sl, kfr_fl;
@@ -169,6 +168,5 @@ struct results *mid_res;
 
     /* soil respiration */
     //	mid_res->soil_resp = npp - mid_res->NEP;
-
     return;
 }
