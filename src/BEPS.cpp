@@ -34,7 +34,7 @@ void read_metro(DataFrame d,
 
 //' @export
 // [[Rcpp::export]]
-void beps_main(String inp_dir, DataFrame d_metro, NumericVector LAI, NumericVector opts) {
+NumericMatrix beps_main(String inp_dir, DataFrame d_metro, NumericVector LAI, NumericVector opts) {
     // int layer = 5;
     const char *indir = (char*)inp_dir.get_cstring();
 
@@ -48,6 +48,8 @@ void beps_main(String inp_dir, DataFrame d_metro, NumericVector LAI, NumericVect
     double st        = opts["soiltemp"];
     double sw        = opts["soilwater"];
     double snowdepth = opts["snowdepth"];
+    int j_start = opts["j_start"];
+    int j_end   = opts["j_end"];
 
     // declare variables
     const int nday = 365;
@@ -55,10 +57,9 @@ void beps_main(String inp_dir, DataFrame d_metro, NumericVector LAI, NumericVect
     read_metro(d_metro, (float *)m_rad, (float *)m_tem, (float *)m_hum, (float *)m_pre, (float *)m_wind);
 
     // double es, esd;
-    double theta_vfc[layer + 1],
-    theta_vwp[layer + 1], thermal_s[layer + 1];
-    double psi_sat[layer + 1], bb[layer + 1], fei[layer + 1];
-    double Ksat[layer + 1], theta[layer + 1];
+    // double theta_vfc[layer + 1], theta_vwp[layer + 1], thermal_s[layer + 1];
+    // double psi_sat[layer + 1], bb[layer + 1], fei[layer + 1];
+    // double Ksat[layer + 1], theta[layer + 1];
 
     double CosZs;
 
@@ -72,7 +73,7 @@ void beps_main(String inp_dir, DataFrame d_metro, NumericVector LAI, NumericVect
 
     meteo = (struct climatedata *)malloc(1 * sizeof(struct climatedata));
     mid_res = (struct results *)malloc(1 * sizeof(struct results));
-    p_soil = (struct Soil *)malloc(sizeof(struct Soil));
+    p_soil = (struct Soil *)malloc(1 * sizeof(struct Soil));
 
     NumericVector total(11);
     double parameter[50];
@@ -84,25 +85,35 @@ void beps_main(String inp_dir, DataFrame d_metro, NumericVector LAI, NumericVect
     // Open output file
     char site[33], outp_fn[240];
     sprintf(site, "p1");
-    sprintf(outp_fn, "inst/examples/output/%s_02.txt", site);
+    sprintf(outp_fn, "inst/examples/output/%s_01.txt", site);
 
     FILE *outp_ptr;
     if ((outp_ptr = fopen(outp_fn, "w")) == NULL) {
         printf("\nUnable to open file <%s>,  exiting ...\n", outp_fn);
-        return;
+        // return;
     }
 
     /*****  start main simulation *****/
     printf("simulation under progress...\n");
-    int i;
+    int i, k = 0;
+
+    NumericMatrix res((j_end - j_start + 1) * 24, 16);
+    CharacterVector names = {"gpp_o_sunlit", "gpp_u_sunlit", "gpp_o_shaded", "gpp_u_shaded", 
+        "plant_resp", "npp_o", "npp_u", "GPP", "NPP", "NEP", "soil_resp", 
+        "Net_Rad", "SH", "LH", "Trans", "Evap"};
+    colnames(res) = names;
 
     // Day loop begin
-    for (int jday = 1; jday <= 365; jday++) {
+    for (int jday = j_start; jday <= j_end; jday++) {
         /***** re-calculate LAI & renew clump index *****/
         double lai = LAI[jday-1] * parameter[2] / clumping;
         // Hour loop begin
         for (int rstep = 0; rstep < 24; rstep++) {
-            int flag = (jday == 1 && rstep == 0) ? 0 : 1;
+            // printf("jday = %02d, hour = %02d\n", jday, rstep);
+            k += 1;
+            int flag = (k == 1) ? 0 : 1;
+            // int flag = (jday == 1 && rstep == 0) ? 0 : 1;
+            s_coszs(jday, rstep, lat, lon, &CosZs); // cos_solar zenith angle Z
 
             meteo->Srad = m_rad[jday - 1][rstep];
             meteo->temp = m_tem[jday - 1][rstep];
@@ -130,15 +141,13 @@ void beps_main(String inp_dir, DataFrame d_metro, NumericVector LAI, NumericVect
                 for (i = 0; i <= 40; i++) var_o[i] = 0;
                 for (i = 3; i <= 8; i++) var_o[i] = tem;
 
+                // error at here;
                 for (i = 9; i <= 14; i++) var_o[i] = p_soil->temp_soil_p[i - 9];
                 for (i = 21; i <= 26; i++) var_o[i] = p_soil->thetam_prev[i - 21];
                 for (i = 27; i <= 32; i++) var_o[i] = p_soil->ice_ratio[i - 27];
 
             } else  //  for other time steps, assigned from the temp variables array
                 for (i = 0; i <= 40; i++) var_o[i] = v2last[i];
-
-            /***** calculate cos_solar zenith angle Z *****/
-            s_coszs(jday, rstep, lat, lon, &CosZs);
 
             /***** start simulation modules *****/
             //printf("%d, %d, %f\n", jday, rstep, p_soil->thetam_prev[0]); // in-process check
@@ -155,6 +164,8 @@ void beps_main(String inp_dir, DataFrame d_metro, NumericVector LAI, NumericVect
             outp[3] = mid_res->NEP;
             outp[4] = mid_res->npp_o + mid_res->npp_u;
             
+            NumericVector v = results2vec(mid_res);
+            res(k - 1, _) = v;
             // Write hourly output to files
             fprintf(outp_ptr,"%d %d gpp= %f tr= %f Ev= %f \n",jday,rstep,outp[1],outp[2],outp[3]);
             // Sum of output
@@ -167,9 +178,9 @@ void beps_main(String inp_dir, DataFrame d_metro, NumericVector LAI, NumericVect
     printf("total GPP: %f \t ET: %f \tNEP: %f \n", total[1], total[2], total[3]);
     fclose(outp_ptr);
 
+    free(p_soil);
     free(meteo);
     free(mid_res);
-    free(p_soil);
-    // return 1;
+    // DataFrame temp = mat2df(res);
+    return res;
 }
-

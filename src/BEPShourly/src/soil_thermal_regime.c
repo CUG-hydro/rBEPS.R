@@ -15,7 +15,7 @@
 /// @param Tair_annual_mean   annual mean air temperature
 /// @param period_in_seconds  360 sec. per time, 10 times per hour
 /// @return void
-void UpdateHeatFlux(struct Soil p[], double Xg_snow, double lambda_snow, double Tsn0, double Tair_annual_mean, double period_in_seconds) {
+void UpdateHeatFlux(struct Soil* p, double Xg_snow, double lambda_snow, double Tsn0, double Tair_annual_mean, double period_in_seconds) {
     int i;
     for (i = 1; i <= p->n_layer; i++) {
         if (i < p->n_layer)
@@ -46,7 +46,7 @@ void UpdateHeatFlux(struct Soil p[], double Xg_snow, double lambda_snow, double 
 /// @brief Function to update volume heat capacity
 /// @param p soil variables struct
 /// @return void
-void Update_Cs(struct Soil p[]) {
+void Update_Cs(struct Soil* p) {
     int i;
 
     for (i = 0; i < p->n_layer; i++) {
@@ -64,7 +64,7 @@ void Update_Cs(struct Soil p[]) {
 /// @brief Function to update the frozen status of each soil
 /// @param p soil variables struct
 /// @return void
-void Update_ice_ratio(struct Soil p[]) {
+void Update_ice_ratio(struct Soil* p) {
     int i;
     double Lf0 = 3.34 * 100000;  // latent heat of fusion (liquid: solid) at 0C
 
@@ -97,7 +97,7 @@ void Update_ice_ratio(struct Soil p[]) {
 /// @details [output] lambda for each layer
 /// @param p soil variables struct
 /// @return void
-void UpdateSoilThermalConductivity(struct Soil p[]) {
+void UpdateSoilThermalConductivity(struct Soil* p) {
     int i;
 
     /*to calculate thermal conductivity of each soil layer, advances in water resources 26(2003), 79-93*/

@@ -1,21 +1,3 @@
----
-title: "Rcpp debug"
-output: html_document
----
-
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
-
-## R Markdown
-
-```{r}
-library(Rcpp)
-```
-
-
-
-```{Rcpp}
 #include <Rcpp.h>
 using namespace Rcpp;
 
@@ -32,14 +14,3 @@ DataFrame mat2df(NumericMatrix mat) {
     Function func = pkg["as_tibble"];
     return func(mat);
 }
-
-/*** R
-mat2df(mat)
-mat2dt(mat)
-#func(opts)
-*/
-```
-```{r}
-
-```
-

@@ -13,7 +13,7 @@
 /// @param kstep   the total seconds in this step (period), defined in beps.h
 /// @note kkk (outside of the function): step within an hour or half hour measurement
 /// @return void
-void UpdateSoilMoisture(struct Soil p[], double kstep) {
+void UpdateSoilMoisture(struct Soil* p, double kstep) {
     double Inf, Inf_max;  // infiltration, and Maximum infiltration
     int i;
     double this_step = 0;  //LHE
@@ -147,7 +147,7 @@ void UpdateSoilMoisture(struct Soil p[], double kstep) {
 /// @param Trans_u    transpiration from understory canopies
 /// @param Evap_soil  evaporation from soil
 /// @return void
-void Soil_Water_Uptake(struct Soil p[], double Trans_o, double Trans_u, double Evap_soil) {
+void Soil_Water_Uptake(struct Soil* p, double Trans_o, double Trans_u, double Evap_soil) {
     int i;
     double rho_w = 1025.0;
     double Source;

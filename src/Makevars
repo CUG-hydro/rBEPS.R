@@ -6,7 +6,8 @@ beps_src = $(beps_PATH)/src
 # HDRS = -I "$(VIC_RUN)/include" -I "$(VIC_DRVSHR)/include" -I "."
 # LOG_LVL = 25
 
-FLAGS = -g -O3 -I"$(beps_PATH)/include" -I.
+# -O3 
+FLAGS = -g -I"$(beps_PATH)/include" -I.
 PKG_CPPFLAGS = ${FLAGS}
 PKG_CFLAGS =${FLAGS}
 
@@ -31,10 +32,11 @@ _OBJS = $(patsubst %,$(ODIR)/%,$(_OBJS_beps)) $(_OBJS_c)
 
 SOURCES_C = $(_OBJS:.o=.c)
 # SOURCES_CPP = Leaf_Temperature.cpp RcppExports.cpp
-SOURCES_CPP = BEPS_helper.cpp BEPS.cpp RcppExports.cpp
+SOURCES_CPP = helper.cpp BEPS_helper.cpp BEPS.cpp RcppExports.cpp
  
 OBJECTS = $(_OBJS) $(SOURCES_CPP:.cpp=.o)
 
+# BEPS_helper.o: helper.o
 # OBJECTS = $(SOURCES_C:.c=.o) $(SOURCES_CPP:.cpp=.o)
 
 # $(ODIR)/%.o: $(IDIR)/%.c

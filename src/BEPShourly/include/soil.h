@@ -86,17 +86,17 @@ struct Soil{
 };
 
 /// @brief Declare functions
-void SoilRootFraction(struct Soil soil[]);
-void Init_Soil_Parameters(int landcover, int stxt, double r_root_decay, struct Soil p[]);
-void Init_Soil_Status(struct Soil p[], double Tsoil, double Tair, double Ms, double snowdepth);
-void soil_water_factor_v2(struct Soil p[]);
-void Soil_Water_Uptake(struct Soil p[], double Trans_o, double Trans_u, double Evap_soil);
-void UpdateSoilLambda(struct Soil soil[]);
-void init_soil_parameter(unsigned char T_USDA, unsigned char S_USDA, unsigned char Ref_Depth, double T_Density, double S_Density, double T_OC, double S_OC, struct Soil soil[]);
-void Update_Cs(struct Soil p[]);
-void Update_ice_ratio(struct Soil p[]);
-void UpdateSoilThermalConductivity(struct Soil p[]);
-void UpdateHeatFlux(struct Soil p[], double Xg_snow, double lambda_snow, double Tsn0, double Tair_annual_mean, double peroid_in_seconds);
-void UpdateSoilMoisture(struct Soil p[], double peroid_in_seconds);
+void SoilRootFraction(struct Soil* soil);
+void Init_Soil_Parameters(int landcover, int stxt, double r_root_decay, struct Soil* p);
+void Init_Soil_Status(struct Soil* p, double Tsoil, double Tair, double Ms, double snowdepth);
+void soil_water_factor_v2(struct Soil* p);
+void Soil_Water_Uptake(struct Soil* p, double Trans_o, double Trans_u, double Evap_soil);
+void UpdateSoilLambda(struct Soil* soil);
+void init_soil_parameter(unsigned char T_USDA, unsigned char S_USDA, unsigned char Ref_Depth, double T_Density, double S_Density, double T_OC, double S_OC, struct Soil* soil);
+void Update_Cs(struct Soil* p);
+void Update_ice_ratio(struct Soil* p);
+void UpdateSoilThermalConductivity(struct Soil* p);
+void UpdateHeatFlux(struct Soil* p, double Xg_snow, double lambda_snow, double Tsn0, double Tair_annual_mean, double peroid_in_seconds);
+void UpdateSoilMoisture(struct Soil* p, double peroid_in_seconds);
 #endif
 

@@ -12,6 +12,7 @@ extern "C" {
     #include <beps.h>
 }
 
+NumericVector results2vec(struct results* r);
 NumericVector c2numvec(double x[], int N);
 double s_coszs_(int jday, int j, double lat, double lon);
 double Leaf_Temperature_(double Tair, double VPD_air, double Cp_ca,
@@ -21,7 +22,7 @@ NumericVector meteo_pack_(double temp, double rh);
 NumericVector readcoef_(int lc, int stxt);
 
 int beps(String inp_dir);
-void beps_main(String inp_dir, NumericVector opts);
+NumericMatrix beps_main(String inp_dir, DataFrame d_metro, NumericVector LAI, NumericVector opts);
 
 
 #endif

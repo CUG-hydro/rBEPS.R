@@ -1,7 +1,7 @@
 #include "rBEPS.h"
 
 
-extern NumericVector c2numvec(double x[], int N) {
+NumericVector c2numvec(double x[], int N) {
     NumericVector ans(N);
     for (int i = 0; i < N; i++)
         ans[i] = x[i];
@@ -88,4 +88,26 @@ NumericVector readcoef_(int lc, int stxt) {
 int beps(String inp_dir){
     char *indir = (char*)inp_dir.get_cstring();
     return beps_c(indir);
+}
+
+NumericVector results2vec(struct results* r) {
+    NumericVector v(16);
+    
+    v[0] = r->gpp_o_sunlit;
+    v[1] = r->gpp_u_sunlit;
+    v[2] = r->gpp_o_shaded;
+    v[3] = r->gpp_u_shaded;
+    v[4] = r->plant_resp;
+    v[5] = r->npp_o;
+    v[6] = r->npp_u;
+    v[7] = r->GPP;
+    v[8] = r->NPP;
+    v[9] = r->NEP;
+    v[10] = r->soil_resp;
+    v[11] = r->Net_Rad;
+    v[12] = r->SH;
+    v[13] = r->LH;
+    v[14] = r->Trans;
+    v[15] = r->Evap;
+    return v;
 }

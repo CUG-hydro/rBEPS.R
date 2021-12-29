@@ -15,8 +15,12 @@
 /// @param  r_root_decay  decay rate of root distribution
 /// @param  p             Soil struct variable
 /// @return void
-void Init_Soil_Parameters(int landcover, int stxt, double r_root_decay, struct Soil p[]) {
+void Init_Soil_Parameters(int landcover, int stxt, double r_root_decay, struct Soil* p) {
     p->n_layer = 5;
+    p->flag = 0;
+    p->step_period = 0;
+    p->soil_r = 0;
+    p->f_soilwater = 0;
 
     if (landcover == 6 || landcover == 9) {
         p->psi_min = 10.0;
@@ -514,7 +518,7 @@ void Init_Soil_Parameters(int landcover, int stxt, double r_root_decay, struct S
 /// @param  Ms         soil water content
 /// @param  snowdepth  snow depth
 /// @return void
-void Init_Soil_Status(struct Soil p[], double Tsoil, double Tair, double Ms, double snowdepth) {
+void Init_Soil_Status(struct Soil* p, double Tsoil, double Tair, double Ms, double snowdepth) {
     int i;
     double d_t = Tsoil - Tair;
 
@@ -564,7 +568,7 @@ void Init_Soil_Status(struct Soil p[], double Tsoil, double Tair, double Ms, dou
 /// @brief Function to calculate the fraction of root in the soil for each soil layer
 /// @param  soil  Soil struct variable
 /// @return void
-void SoilRootFraction(struct Soil soil[]) {
+void SoilRootFraction(struct Soil* soil) {
     int i;
     double cum_depth[MAX_LAYERS];
 

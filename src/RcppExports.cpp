@@ -11,16 +11,17 @@ Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
 // beps_main
-void beps_main(String inp_dir, DataFrame d_metro, NumericVector LAI, NumericVector opts);
+NumericMatrix beps_main(String inp_dir, DataFrame d_metro, NumericVector LAI, NumericVector opts);
 RcppExport SEXP _rBEPS_beps_main(SEXP inp_dirSEXP, SEXP d_metroSEXP, SEXP LAISEXP, SEXP optsSEXP) {
 BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< String >::type inp_dir(inp_dirSEXP);
     Rcpp::traits::input_parameter< DataFrame >::type d_metro(d_metroSEXP);
     Rcpp::traits::input_parameter< NumericVector >::type LAI(LAISEXP);
     Rcpp::traits::input_parameter< NumericVector >::type opts(optsSEXP);
-    beps_main(inp_dir, d_metro, LAI, opts);
-    return R_NilValue;
+    rcpp_result_gen = Rcpp::wrap(beps_main(inp_dir, d_metro, LAI, opts));
+    return rcpp_result_gen;
 END_RCPP
 }
 // Leaf_Temperature_
@@ -107,6 +108,28 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// mat2dt
+DataFrame mat2dt(NumericMatrix mat);
+RcppExport SEXP _rBEPS_mat2dt(SEXP matSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericMatrix >::type mat(matSEXP);
+    rcpp_result_gen = Rcpp::wrap(mat2dt(mat));
+    return rcpp_result_gen;
+END_RCPP
+}
+// mat2df
+DataFrame mat2df(NumericMatrix mat);
+RcppExport SEXP _rBEPS_mat2df(SEXP matSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericMatrix >::type mat(matSEXP);
+    rcpp_result_gen = Rcpp::wrap(mat2df(mat));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_rBEPS_beps_main", (DL_FUNC) &_rBEPS_beps_main, 4},
@@ -116,6 +139,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_rBEPS_s_coszs_", (DL_FUNC) &_rBEPS_s_coszs_, 4},
     {"_rBEPS_readcoef_", (DL_FUNC) &_rBEPS_readcoef_, 2},
     {"_rBEPS_beps", (DL_FUNC) &_rBEPS_beps, 1},
+    {"_rBEPS_mat2dt", (DL_FUNC) &_rBEPS_mat2dt, 1},
+    {"_rBEPS_mat2df", (DL_FUNC) &_rBEPS_mat2df, 1},
     {NULL, NULL, 0}
 };
 

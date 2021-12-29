@@ -18,7 +18,7 @@
 /// @details [output] dt, fw-soil water stress
 /// @param  p  soil conditions struct
 /// @return void
-void soil_water_factor_v2(struct Soil p[]) {
+void soil_water_factor_v2(struct Soil* p) {
     double ft[MAX_LAYERS], fpsisr[MAX_LAYERS];
     double dtt[MAX_LAYERS];
     double t1, t2;

@@ -3,7 +3,7 @@
 
 #' @export
 beps_main <- function(inp_dir, d_metro, LAI, opts) {
-    invisible(.Call(`_rBEPS_beps_main`, inp_dir, d_metro, LAI, opts))
+    .Call(`_rBEPS_beps_main`, inp_dir, d_metro, LAI, opts)
 }
 
 #' @export
@@ -45,5 +45,13 @@ readcoef_ <- function(lc, stxt) {
 #' @export
 beps <- function(inp_dir) {
     .Call(`_rBEPS_beps`, inp_dir)
+}
+
+mat2dt <- function(mat) {
+    .Call(`_rBEPS_mat2dt`, mat)
+}
+
+mat2df <- function(mat) {
+    .Call(`_rBEPS_mat2df`, mat)
 }
 
