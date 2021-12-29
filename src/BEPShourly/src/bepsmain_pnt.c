@@ -9,21 +9,23 @@
 int beps_c(char *inp_dir) {
     int jday, rstep, dd, tt, flag, i;
     int landcover, soil_type;
-    float lai_p[366];
+    const int nday = 365;
     float lon, lat;
     float lcv, stypev, stv, swv, sdpv;
     
     float ccdv, cssdv, csmdv, cfsdv, cfmdv, csmv, cmv, csv, cpv;
     float rv, tv, hv, pv, wv, civ;
-    float m_rad[366][25], m_tem[366][25], m_hum[366][25], m_pre[366][25], m_wind[366][25];
+
+    float lai_p[nday];
+    float m_rad[nday][24], m_tem[nday][24], m_hum[nday][24], m_pre[nday][24], m_wind[nday][24];
     double tem, hum, st, sw, snowdepth, temp_soil1, temp_soil[layer + 1];
 
     double lai, clumping;
     // parameters for respiration
     // float nppyr, lai_yr;
     // double Ccd[5], Cssd[5], Csmd[5], Cfsd[5], Cfmd[5], Csm[5], Cm[5], Cs[5], Cp[5];
-    
-    char site[33], lc_fn[70], cp_fn[70], lai_fn[60], me_fn[60], outp_fn[80];
+
+    char site[33], lc_fn[240], cp_fn[240], lai_fn[240], me_fn[240], outp_fn[240];
     FILE *lc_ptr, *cp_ptr, *laif_ptr, *me_ptr, *outp_ptr;
 
     double es, esd;
@@ -33,17 +35,17 @@ int beps_c(char *inp_dir) {
     double coef[100];
     double CosZs;
     double parameter[50];
-
-    double var_o[40], var_n[40];
-    double v2last[40];
+    
+    double var_o[41], var_n[41];
+    double v2last[41];
     double outp[10], total[10];
 
     struct climatedata *meteo;
     struct results *mid_res;
     struct Soil *p_soil;
     // Declare dynamic arrays
-    meteo = (struct climatedata *)malloc(366 * sizeof(struct climatedata));
-    mid_res = (struct results *)malloc(366 * sizeof(struct results));
+    meteo = (struct climatedata *)malloc(1 * sizeof(struct climatedata));
+    mid_res = (struct results *)malloc(1 * sizeof(struct results));
     p_soil = (struct Soil *)malloc(sizeof(struct Soil));
 
     /*****  setup input/output file directory  *****/

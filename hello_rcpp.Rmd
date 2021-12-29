@@ -1,0 +1,48 @@
+---
+title: "Rcpp debug"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+```{r}
+library(Rcpp)
+```
+
+
+
+```{Rcpp}
+#include <Rcpp.h>
+using namespace Rcpp;
+
+// [[Rcpp::export]]
+NumericVector func(NumericVector opts){
+    // 8 parameters
+    int LC           = opts["LC"];
+    int soil_type    = opts["soil_type"];
+    
+    double lon       = opts["long"];
+    double lat       = opts["lat"];
+    double clumping  = opts["clumping"];
+    double st        = opts["soiltemp"];
+    double sw        = opts["soilwater"];
+    double snowdepth = opts["snowdepth"];
+
+    return opts;
+}
+
+
+
+/*** R
+
+func(opts)
+*/
+```
+```{r}
+
+```
+

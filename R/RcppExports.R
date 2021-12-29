@@ -2,6 +2,11 @@
 # Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 #' @export
+beps_main <- function(inp_dir, d_metro, LAI, opts) {
+    invisible(.Call(`_rBEPS_beps_main`, inp_dir, d_metro, LAI, opts))
+}
+
+#' @export
 Leaf_Temperature_ <- function(Tair, VPD_air, Cp_ca, Gw, Gww, Gh, Xc_sl, radiation, constrain = FALSE) {
     .Call(`_rBEPS_Leaf_Temperature_`, Tair, VPD_air, Cp_ca, Gw, Gww, Gh, Xc_sl, radiation, constrain)
 }
@@ -18,9 +23,9 @@ meteo_pack_ <- function(temp, rh) {
 
 #' Calculating cosZ
 #' @param j hour of day
-#' @export
 #' @examples
 #' s_coszs_(1, 1, 15, 120)
+#' @export
 s_coszs_ <- function(jday, j, lat, lon) {
     .Call(`_rBEPS_s_coszs_`, jday, j, lat, lon)
 }

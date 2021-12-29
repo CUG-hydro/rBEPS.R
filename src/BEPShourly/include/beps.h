@@ -1,3 +1,6 @@
+#ifndef BEPS_H
+#define BEPS_H
+
 /// @file beps.h
 /// @brief Header file for defining constants and global variables for BEPS program
 ///
@@ -205,28 +208,30 @@ void snowpack_stage3(double temp_air, double temp_snow, double temp_snow_last, d
                      double* depth_snow, double* depth_water, double* mass_snow_g);
 
 /// @brief Declare global variables
-short lc_no;
-int yr, bgn_day, end_day;
-int npixels, nlines;
+// short lc_no;
+// int yr, bgn_day, end_day;
+// int npixels, nlines;
 
-char lc_fn[255];   /* Land cover file */
-char lai_fn[255];  /* Leaf area index file  */
-char lai_fp[255];  /* Leaf area index file prefix */
-char stxt_fn[255]; /* soil texture file */
-char ci_fn[255];   /* clumping index file */
-char st_fn[255];   /* initial values of soil temp */
-char sw_fn[255];   /* initial values of soil water */
-char sdp_fn[255];  /* initial values of snow depth*/
+// char lc_fn[255];   /* Land cover file */
+// char lai_fn[255];  /* Leaf area index file  */
+// char lai_fp[255];  /* Leaf area index file prefix */
+// char stxt_fn[255]; /* soil texture file */
+// char ci_fn[255];   /* clumping index file */
+// char st_fn[255];   /* initial values of soil temp */
+// char sw_fn[255];   /* initial values of soil water */
+// char sdp_fn[255];  /* initial values of snow depth*/
 
-char r_fn[255]; /* meteor. data files */
-char t_fn[255];
-char h_fn[255];
-char p_fn[255];
-char wd_fn[255];
+// char r_fn[255]; /* meteor. data files */
+// char t_fn[255];
+// char h_fn[255];
+// char p_fn[255];
+// char wd_fn[255];
 
-char lon_fn[255];
-char lat_fn[255];
+// char lon_fn[255];
+// char lat_fn[255];
 
-char fp4outp1[255]; /* output file1 prefix */
-char fp4outp2[255]; /* output file2 prefix */
-char fp4outp3[255]; /* output file3 prefix */
+// char fp4outp1[255]; /* output file1 prefix */
+// char fp4outp2[255]; /* output file2 prefix */
+// char fp4outp3[255]; /* output file3 prefix */
+
+#endif

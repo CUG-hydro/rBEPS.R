@@ -30,7 +30,8 @@ _OBJS_beps = aerodynamic_conductance.o bepsmain_pnt.o Leaf_Temperature.o \
 _OBJS = $(patsubst %,$(ODIR)/%,$(_OBJS_beps)) $(_OBJS_c)
 
 SOURCES_C = $(_OBJS:.o=.c)
-SOURCES_CPP = Leaf_Temperature.cpp RcppExports.cpp
+# SOURCES_CPP = Leaf_Temperature.cpp RcppExports.cpp
+SOURCES_CPP = BEPS_helper.cpp BEPS.cpp RcppExports.cpp
  
 OBJECTS = $(_OBJS) $(SOURCES_CPP:.cpp=.o)
 

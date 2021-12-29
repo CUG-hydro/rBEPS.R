@@ -10,6 +10,19 @@ Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
 Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
+// beps_main
+void beps_main(String inp_dir, DataFrame d_metro, NumericVector LAI, NumericVector opts);
+RcppExport SEXP _rBEPS_beps_main(SEXP inp_dirSEXP, SEXP d_metroSEXP, SEXP LAISEXP, SEXP optsSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< String >::type inp_dir(inp_dirSEXP);
+    Rcpp::traits::input_parameter< DataFrame >::type d_metro(d_metroSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type LAI(LAISEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type opts(optsSEXP);
+    beps_main(inp_dir, d_metro, LAI, opts);
+    return R_NilValue;
+END_RCPP
+}
 // Leaf_Temperature_
 double Leaf_Temperature_(double Tair, double VPD_air, double Cp_ca, double Gw, double Gww, double Gh, double Xc_sl, double radiation, bool constrain);
 RcppExport SEXP _rBEPS_Leaf_Temperature_(SEXP TairSEXP, SEXP VPD_airSEXP, SEXP Cp_caSEXP, SEXP GwSEXP, SEXP GwwSEXP, SEXP GhSEXP, SEXP Xc_slSEXP, SEXP radiationSEXP, SEXP constrainSEXP) {
@@ -96,6 +109,7 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
+    {"_rBEPS_beps_main", (DL_FUNC) &_rBEPS_beps_main, 4},
     {"_rBEPS_Leaf_Temperature_", (DL_FUNC) &_rBEPS_Leaf_Temperature_, 9},
     {"_rBEPS_lai2_", (DL_FUNC) &_rBEPS_lai2_, 6},
     {"_rBEPS_meteo_pack_", (DL_FUNC) &_rBEPS_meteo_pack_, 2},
