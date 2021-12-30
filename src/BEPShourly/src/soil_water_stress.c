@@ -28,7 +28,7 @@ void soil_water_factor_v2(struct Soil* p) {
     t1 = -0.02;
     t2 = 2.0;
 
-    if (p->psim[0] <= 0.000001)  // just in case that this function is called before "updatesoilmoisture". LHE
+    // if (p->psim[0] <= 0.000001)  // just in case that this function is called before "updatesoilmoisture". LHE
         for (i = 0; i < p->n_layer; i++) {
             p->psim[i] = p->psi_sat[i] * pow(p->thetam[i] / p->fei[i], -p->b[i]);
             p->psim[i] = max(p->psi_sat[i], p->psim[i]);  // I see no necessity to use this line unless thetam > fei. LHE May 20, 2015

@@ -50,17 +50,19 @@ void Leaf_Temperatures(double Tair, double slope, double psychrometer, double VP
                        double Gh_o_sunlit, double Gh_o_shaded, double Gh_u_sunlit, double Gh_u_shaded,
                        double Xcs_o, double Xcl_o, double Xcs_u, double Xcl_u,
                        double radiation_o_sun, double radiation_o_shaded, double radiation_u_sun, double radiation_u_shaded,
-                       double *Tc_o_sunlit, double *Tc_o_shaded, double *Tc_u_sunlit, double *Tc_u_shaded) {
-    *Tc_o_sunlit = Leaf_Temperature(Tair, slope, psychrometer, VPD_air, Cp_ca,
+                       //    double *Tc_o_sunlit, double *Tc_o_shaded, double *Tc_u_sunlit, double *Tc_u_shaded
+                       struct Leaf* Tc) 
+{
+    Tc->o_sunlit = Leaf_Temperature(Tair, slope, psychrometer, VPD_air, Cp_ca,
                                     Gw_o_sunlit, Gww_o_sunlit, Gh_o_sunlit, Xcs_o + Xcl_o, radiation_o_sun, true);
 
-    *Tc_o_shaded = Leaf_Temperature(Tair, slope, psychrometer, VPD_air, Cp_ca,
-                                    Gw_o_shaded, Gww_o_shaded, Gh_o_shaded, Xcs_o + Xcl_o, radiation_o_shaded, true);
+    Tc->o_shaded = Leaf_Temperature(Tair, slope, psychrometer, VPD_air, Cp_ca,
+                                     Gw_o_shaded, Gww_o_shaded, Gh_o_shaded, Xcs_o + Xcl_o, radiation_o_shaded, true);
 
-    *Tc_u_sunlit = Leaf_Temperature(Tair, slope, psychrometer, VPD_air, Cp_ca,
+    Tc->u_sunlit = Leaf_Temperature(Tair, slope, psychrometer, VPD_air, Cp_ca,
                                     Gw_u_sunlit, Gww_u_sunlit, Gh_u_sunlit, Xcs_u + Xcl_u, radiation_u_sun, true);
 
-    *Tc_u_shaded = Leaf_Temperature(Tair, slope, psychrometer, VPD_air, Cp_ca,
+    Tc->u_shaded = Leaf_Temperature(Tair, slope, psychrometer, VPD_air, Cp_ca,
                                     Gw_u_shaded, Gww_u_shaded, Gh_u_shaded, Xcs_u + Xcl_u, radiation_u_shaded, true);
 }
 

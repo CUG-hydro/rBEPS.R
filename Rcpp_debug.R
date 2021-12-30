@@ -1,7 +1,10 @@
+#! /usr/bin/Rscript
+
 devtools::load_all()
 # beps(system.file("examples/input", package = "rBEPS"))
 
 library(data.table)
+library(dplyr)
 
 d_metro <- fread("inst/examples/input/p1_meteo.txt")
 colnames(d_metro) <- c("day", "hour", "rad", "tem", "hum", "pre", "wind")
@@ -19,8 +22,11 @@ opts <- c(
     soilwater = 0.4115,
     snowdepth = 0, 
     j_start = 1, 
-    j_end = 20
+    j_end = 1
 )
+
 indir <- "inst/examples/input"
 res1 = beps_main(indir, d_metro, LAI, opts) %>% mat2df()
-res2 = beps_main(indir, d_metro, LAI, opts)
+res2 = beps_main(indir, d_metro, LAI, opts) %>% mat2df()
+diff = tibble::as_tibble(res1 - res2) %>% 
+    dplyr::select(-starts_with("npp"), -ends_with("resp"), -NEP)

@@ -32,11 +32,14 @@
 /// @param trans_o         transpiration from overstory
 /// @param trans_u         transpiration from understory
 /// @return void
-void transpiration(double tempL_o_sunlit, double tempL_o_shaded, double tempL_u_sunlit, double tempL_u_shaded,
-                   double temp_air, double rh_air,
-                   double Gtrans_o_sunlit, double Gtrans_o_shaded, double Gtrans_u_sunlit, double Gtrans_u_shaded,
-                   double lai_o_sunlit, double lai_o_shaded, double lai_u_sunlit, double lai_u_shaded,
-                   double* trans_o, double* trans_u) {
+void transpiration(
+    struct Leaf tempL,
+    // double tempL_o_sunlit, double tempL_o_shaded, double tempL_u_sunlit, double tempL_u_shaded,
+    double temp_air, double rh_air,
+    double Gtrans_o_sunlit, double Gtrans_o_shaded, double Gtrans_u_sunlit, double Gtrans_u_shaded,
+    double lai_o_sunlit, double lai_o_shaded, double lai_u_sunlit, double lai_u_shaded,
+    double* trans_o, double* trans_u) 
+{
     double LHt_o_sunlit, LHt_o_shaded, LHt_u_sunlit, LHt_u_shaded;  // latent heat from leaves W/m2
     double meteo_pack_output[10];
     double density_air, cp_air, vpd_air, slope_vapor_air, psy_air;
@@ -51,10 +54,10 @@ void transpiration(double tempL_o_sunlit, double tempL_o_shaded, double tempL_u_
     
     latent_water = (2.501 - 0.00237 * temp_air) * 1000000;
 
-    LHt_o_sunlit = (vpd_air + slope_vapor_air * (tempL_o_sunlit - temp_air)) * density_air * cp_air * Gtrans_o_sunlit / psy_air;
-    LHt_o_shaded = (vpd_air + slope_vapor_air * (tempL_o_shaded - temp_air)) * density_air * cp_air * Gtrans_o_shaded / psy_air;
-    LHt_u_sunlit = (vpd_air + slope_vapor_air * (tempL_u_sunlit - temp_air)) * density_air * cp_air * Gtrans_u_sunlit / psy_air;
-    LHt_u_shaded = (vpd_air + slope_vapor_air * (tempL_u_shaded - temp_air)) * density_air * cp_air * Gtrans_u_shaded / psy_air;
+    LHt_o_sunlit = (vpd_air + slope_vapor_air * (tempL.o_sunlit - temp_air)) * density_air * cp_air * Gtrans_o_sunlit / psy_air;
+    LHt_o_shaded = (vpd_air + slope_vapor_air * (tempL.o_shaded - temp_air)) * density_air * cp_air * Gtrans_o_shaded / psy_air;
+    LHt_u_sunlit = (vpd_air + slope_vapor_air * (tempL.u_sunlit - temp_air)) * density_air * cp_air * Gtrans_u_sunlit / psy_air;
+    LHt_u_shaded = (vpd_air + slope_vapor_air * (tempL.u_shaded - temp_air)) * density_air * cp_air * Gtrans_u_shaded / psy_air;
 
     *trans_o = 1 / (latent_water) * (LHt_o_sunlit * lai_o_sunlit + LHt_o_shaded * lai_o_shaded);
     *trans_u = 1 / (latent_water) * (LHt_u_sunlit * lai_u_sunlit + LHt_u_shaded * lai_u_shaded);

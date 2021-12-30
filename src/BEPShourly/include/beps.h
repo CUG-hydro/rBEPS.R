@@ -88,6 +88,13 @@ struct cpools {
     double Cp[3];
 };
 
+struct Leaf {
+    double o_sunlit; 
+    double o_shaded;
+    double u_sunlit; 
+    double u_shaded;
+};
+
 /// @brief Declare functions
 /** FUNCTIONS *****************************************************************/
 int beps_c(char *inp_dir);
@@ -145,29 +152,36 @@ void Leaf_Temperatures(double Tair, double slope, double psychrometer, double VP
                        double Gh_o_sunlit, double Gh_o_shaded, double Gh_u_sunlit, double Gh_u_shaded,
                        double Xcs_o, double Xcl_o, double Xcs_u, double Xcl_u,
                        double radiation_o_sun, double radiation_o_shaded, double radiation_u_sun, double radiation_u_shaded,
-                       double* Tc_o_sunlit, double* Tc_o_shaded, double* Tc_u_sunlit, double* Tc_u_shaded);
+                       //    double* Tc_o_sunlit, double* Tc_o_shaded, double* Tc_u_sunlit, double* Tc_u_shaded
+                       struct Leaf* Tc);
 
 double Leaf_Temperature(double Tair, double slope, double psychrometer, double VPD_air, double Cp_ca,
                         double Gw, double Gww, double Gh, double Xc_sl, double radiation, bool constrain);
 
-void sensible_heat(double tempL_o_sunlit, double tempL_o_shaded, double tempL_u_sunlit, double tempL_u_shaded,
-                   double temp_g, double temp_air, double rh_air,
-                   double Gheat_o_sunlit, double Gheat_o_shaded, double Gheat_u_sunlit, double Gheat_u_shaded, double Gheat_g,
-                   double lai_o_sunlit, double lai_o_shaded, double lai_u_sunlit, double lai_u_shaded,
-                   double* SH_o, double* SH_u, double* SH_g);
+void sensible_heat(
+    struct Leaf tempL,
+    // double tempL_o_sunlit, double tempL_o_shaded, double tempL_u_sunlit, double tempL_u_shaded,
+    double temp_g, double temp_air, double rh_air,
+    double Gheat_o_sunlit, double Gheat_o_shaded, double Gheat_u_sunlit, double Gheat_u_shaded, double Gheat_g,
+    double lai_o_sunlit, double lai_o_shaded, double lai_u_sunlit, double lai_u_shaded,
+    double* SH_o, double* SH_u, double* SH_g);
 
-void transpiration(double tempL_o_sunlit, double tempL_o_shaded, double tempL_u_sunlit, double tempL_u_shaded,
-                   double temp_air, double rh_air,
-                   double Gtrans_o_sunlit, double Gtrans_o_shaded, double Gtrans_u_sunlit, double Gtrans_u_shaded,
-                   double lai_o_sunlit, double lai_o_shaded, double lai_u_sunlit, double lai_u_shaded,
-                   double* trans_o, double* trans_u);
+void transpiration(
+    struct Leaf tempL,
+    // double tempL_o_sunlit, double tempL_o_shaded, double tempL_u_sunlit, double tempL_u_shaded,
+    double temp_air, double rh_air,
+    double Gtrans_o_sunlit, double Gtrans_o_shaded, double Gtrans_u_sunlit, double Gtrans_u_shaded,
+    double lai_o_sunlit, double lai_o_shaded, double lai_u_sunlit, double lai_u_shaded,
+    double* trans_o, double* trans_u);
 
-void evaporation_canopy(double tempL_o_sunlit, double tempL_o_shaded, double tempL_u_sunlit, double tempL_u_shaded,
-                        double temp_air, double rh_air,
-                        double Gwater_o_sunlit, double Gwater_o_shaded, double Gwater_u_sunlit, double Gwater_u_shaded,
-                        double lai_o_sunlit, double lai_o_shaded, double lai_u_sunlit, double lai_u_shaded,
-                        double percent_water_o, double percent_water_u, double percent_snow_o, double percent_snow_u,
-                        double* evapo_water_o, double* evapo_water_u, double* evapo_snow_o, double* evapo_snow_u);
+void evaporation_canopy(
+    struct Leaf tempL,
+    // double tempL_o_sunlit, double tempL_o_shaded, double tempL_u_sunlit, double tempL_u_shaded,
+    double temp_air, double rh_air,
+    double Gwater_o_sunlit, double Gwater_o_shaded, double Gwater_u_sunlit, double Gwater_u_shaded,
+    double lai_o_sunlit, double lai_o_shaded, double lai_u_sunlit, double lai_u_shaded,
+    double percent_water_o, double percent_water_u, double percent_snow_o, double percent_snow_u,
+    double* evapo_water_o, double* evapo_water_u, double* evapo_snow_o, double* evapo_snow_u);
 
 void evaporation_soil(double temp_air, double temp_g, double rh_air, double netRad_g, double Gheat_g,
                       double* percent_snow_g, double* depth_water, double* depth_snow, double* mass_water_g, double* mass_snow_g,

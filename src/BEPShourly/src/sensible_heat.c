@@ -34,12 +34,13 @@
 /// @param SH_u              sensible heat, understory
 /// @param SH_g              sensible heat, ground
 /// @return void
-void sensible_heat(double tempL_o_sunlit, double tempL_o_shaded, double tempL_u_sunlit, double tempL_u_shaded,
-                   double temp_g, double temp_air, double rh_air,
-                   double Gheat_o_sunlit, double Gheat_o_shaded, double Gheat_u_sunlit, double Gheat_u_shaded, double Gheat_g,
-                   double lai_o_sunlit, double lai_o_shaded, double lai_u_sunlit, double lai_u_shaded,
-                   double* SH_o, double* SH_u, double* SH_g) 
-{
+void sensible_heat(
+    struct Leaf tempL,
+    // double tempL_o_sunlit, double tempL_o_shaded, double tempL_u_sunlit, double tempL_u_shaded,
+    double temp_g, double temp_air, double rh_air,
+    double Gheat_o_sunlit, double Gheat_o_shaded, double Gheat_u_sunlit, double Gheat_u_shaded, double Gheat_g,
+    double lai_o_sunlit, double lai_o_shaded, double lai_u_sunlit, double lai_u_shaded,
+    double* SH_o, double* SH_u, double* SH_g) {
     double SH_o_sunlit, SH_o_shaded, SH_u_sunlit, SH_u_shaded;  // sensible heat from leaves
     double meteo_pack_output[10];
     double density_air0, cp_air, vpd;
@@ -50,11 +51,11 @@ void sensible_heat(double tempL_o_sunlit, double tempL_o_shaded, double tempL_u_
     vpd = meteo_pack_output[3];
 
     /********************************************/
-    SH_o_sunlit = (tempL_o_sunlit - temp_air) * density_air0 * cp_air * Gheat_o_sunlit;
-    SH_o_shaded = (tempL_o_shaded - temp_air) * density_air0 * cp_air * Gheat_o_shaded;
+    SH_o_sunlit = (tempL.o_sunlit - temp_air) * density_air0 * cp_air * Gheat_o_sunlit;
+    SH_o_shaded = (tempL.o_shaded - temp_air) * density_air0 * cp_air * Gheat_o_shaded;
 
-    SH_u_sunlit = (tempL_u_sunlit - temp_air) * density_air0 * cp_air * Gheat_u_sunlit;
-    SH_u_shaded = (tempL_u_shaded - temp_air) * density_air0 * cp_air * Gheat_u_shaded;
+    SH_u_sunlit = (tempL.u_sunlit - temp_air) * density_air0 * cp_air * Gheat_u_sunlit;
+    SH_u_shaded = (tempL.u_shaded - temp_air) * density_air0 * cp_air * Gheat_u_shaded;
     /********************************************/
 
     *SH_o = SH_o_sunlit * lai_o_sunlit + SH_o_shaded * lai_o_shaded;
