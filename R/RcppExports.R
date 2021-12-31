@@ -2,8 +2,8 @@
 # Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 #' @export
-beps_main <- function(inp_dir, d_metro, LAI, opts) {
-    .Call(`_rBEPS_beps_main`, inp_dir, d_metro, LAI, opts)
+beps_main <- function(d_metro, LAI, opts) {
+    .Call(`_rBEPS_beps_main`, d_metro, LAI, opts)
 }
 
 #' @export

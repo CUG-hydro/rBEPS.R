@@ -25,12 +25,12 @@ opts <- c(
 )
 
 func <- function() {
-    beps_main(indir, d_metro, LAI, opts) %>% mat2df() %>% 
+    beps_main(d_metro, LAI, opts) %>% mat2df() %>% 
         dplyr::select(-starts_with("npp"), -ends_with("resp"), -NEP) %>% 
         .[, -(1:4)]
 }
 
-indir <- "inst/examples/input"
+# indir <- "inst/examples/input"
 res1 = func(); print(res1)
 res2 = func(); print(res2)
 

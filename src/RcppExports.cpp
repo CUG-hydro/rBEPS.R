@@ -11,16 +11,15 @@ Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
 // beps_main
-NumericMatrix beps_main(String inp_dir, DataFrame d_metro, NumericVector LAI, NumericVector opts);
-RcppExport SEXP _rBEPS_beps_main(SEXP inp_dirSEXP, SEXP d_metroSEXP, SEXP LAISEXP, SEXP optsSEXP) {
+NumericMatrix beps_main(DataFrame d_metro, NumericVector LAI, NumericVector opts);
+RcppExport SEXP _rBEPS_beps_main(SEXP d_metroSEXP, SEXP LAISEXP, SEXP optsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< String >::type inp_dir(inp_dirSEXP);
     Rcpp::traits::input_parameter< DataFrame >::type d_metro(d_metroSEXP);
     Rcpp::traits::input_parameter< NumericVector >::type LAI(LAISEXP);
     Rcpp::traits::input_parameter< NumericVector >::type opts(optsSEXP);
-    rcpp_result_gen = Rcpp::wrap(beps_main(inp_dir, d_metro, LAI, opts));
+    rcpp_result_gen = Rcpp::wrap(beps_main(d_metro, LAI, opts));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -116,7 +115,7 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_rBEPS_beps_main", (DL_FUNC) &_rBEPS_beps_main, 4},
+    {"_rBEPS_beps_main", (DL_FUNC) &_rBEPS_beps_main, 3},
     {"_rBEPS_Leaf_Temperature_", (DL_FUNC) &_rBEPS_Leaf_Temperature_, 9},
     {"_rBEPS_meteo_pack_", (DL_FUNC) &_rBEPS_meteo_pack_, 2},
     {"_rBEPS_s_coszs_", (DL_FUNC) &_rBEPS_s_coszs_, 4},

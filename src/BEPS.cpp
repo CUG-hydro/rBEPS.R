@@ -34,10 +34,10 @@ void read_metro(DataFrame d,
 
 //' @export
 // [[Rcpp::export]]
-NumericMatrix beps_main(String inp_dir, DataFrame d_metro, NumericVector LAI, NumericVector opts) {
+NumericMatrix beps_main(DataFrame d_metro, NumericVector LAI, NumericVector opts) {
     // int layer = 5;
-    const char *indir = (char*)inp_dir.get_cstring();
-
+    // const char *indir = (char*)inp_dir.get_cstring();
+    
     // 8 parameters
     int landcover = opts["LC"];
     int soil_type    = opts["soil_type"];
@@ -55,11 +55,6 @@ NumericMatrix beps_main(String inp_dir, DataFrame d_metro, NumericVector LAI, Nu
     const int nday = 365;
     float m_rad[nday][24], m_tem[nday][24], m_hum[nday][24], m_pre[nday][24], m_wind[nday][24];
     read_metro(d_metro, (float *)m_rad, (float *)m_tem, (float *)m_hum, (float *)m_pre, (float *)m_wind);
-
-    // double es, esd;
-    // double theta_vfc[layer + 1], theta_vwp[layer + 1], thermal_s[layer + 1];
-    // double psi_sat[layer + 1], bb[layer + 1], fei[layer + 1];
-    // double Ksat[layer + 1], theta[layer + 1];
 
     double CosZs;
 
@@ -83,15 +78,14 @@ NumericMatrix beps_main(String inp_dir, DataFrame d_metro, NumericVector LAI, Nu
     readcoef(landcover, soil_type, coef);
 
     // Open output file
-    char site[33], outp_fn[240];
-    sprintf(site, "p1");
-    sprintf(outp_fn, "inst/examples/output/%s_01.txt", site);
-
-    FILE *outp_ptr;
-    if ((outp_ptr = fopen(outp_fn, "w")) == NULL) {
-        printf("\nUnable to open file <%s>,  exiting ...\n", outp_fn);
-        // return;
-    }
+    // char site[33], outp_fn[240];
+    // sprintf(site, "p1");
+    // sprintf(outp_fn, "inst/examples/output/%s_01.txt", site);
+    // FILE *outp_ptr;
+    // if ((outp_ptr = fopen(outp_fn, "w")) == NULL) {
+    //     printf("\nUnable to open file <%s>,  exiting ...\n", outp_fn);
+    //     // return;
+    // }
 
     /*****  start main simulation *****/
     printf("simulation under progress...\n");
@@ -167,16 +161,16 @@ NumericMatrix beps_main(String inp_dir, DataFrame d_metro, NumericVector LAI, Nu
             NumericVector v = results2vec(mid_res);
             res(k - 1, _) = v;
             // Write hourly output to files
-            fprintf(outp_ptr,"%d %d gpp= %f tr= %f Ev= %f \n",jday,rstep,outp[1],outp[2],outp[3]);
+            // fprintf(outp_ptr,"%d %d gpp= %f tr= %f Ev= %f \n",jday,rstep,outp[1],outp[2],outp[3]);
             // Sum of output
             total[1] = total[1] + outp[1];
             total[2] = total[2] + outp[2];
-            total[3] = total[3] + outp[3];
+            // total[3] = total[3] + outp[3];
         }  // End of hourly loop
     }      // End of daily loop
-    fprintf(outp_ptr, "total GPP: %f \t ET: %f \tNEP: %f \n", total[1], total[2], total[3]);
-    printf("total GPP: %f \t ET: %f \tNEP: %f \n", total[1], total[2], total[3]);
-    fclose(outp_ptr);
+    // fprintf(outp_ptr, "total GPP: %f \t ET: %f \tNEP: %f \n", total[1], total[2], total[3]);
+    printf("total GPP: %f \t ET: %f \tNEP: %f \n", total[1], total[2]); // , total[3]
+    // fclose(outp_ptr);
 
     free(p_soil);
     free(meteo);
