@@ -45,28 +45,34 @@
 /// @param  netRad_o                  net radiation on overstorey
 /// @param  netRad_u                  net radiation on understorey
 /// @param  netRad_g                  net radiation on ground
-/// @param  netRadLeaf_o_sunlit       net radiation at the leaf level, overstory sunlit, for ET calculation
-/// @param  netRadLeaf_o_shaded       net radiation at the leaf level, overstory shaded
-/// @param  netRadLeaf_u_sunlit       net radiation at the leaf level, understory sunlit
-/// @param  netRadLeaf_u_shaded       net radiation at the leaf level, understory shaded
-/// @param  netShortRadLeaf_o_sunlit  net shortwave radiation at leaf level, overstory sunlit, for GPP calculation
-/// @param  netShortRadLeaf_o_shaded  net shortwave radiation at leaf level, overstory shaded
-/// @param  netShortRadLeaf_u_sunlit  net shortwave radiation at leaf level, understory sunlit
-/// @param  netShortRadLeaf_u_shaded  net shortwave radiation at leaf level, understory shaded
+/// @param  netRadLeaf.o_sunlit       net radiation at the leaf level, overstory sunlit, for ET calculation
+/// @param  netRadLeaf.o_shaded       net radiation at the leaf level, overstory shaded
+/// @param  netRadLeaf.u_sunlit       net radiation at the leaf level, understory sunlit
+/// @param  netRadLeaf.u_shaded       net radiation at the leaf level, understory shaded
+/// @param  netShortRadLeaf.o_sunlit  net shortwave radiation at leaf level, overstory sunlit, for GPP calculation
+/// @param  netShortRadLeaf.o_shaded  net shortwave radiation at leaf level, overstory shaded
+/// @param  netShortRadLeaf.u_sunlit  net shortwave radiation at leaf level, understory sunlit
+/// @param  nenetShortRadLeaf.u_shaded  net shortwave radiation at leaf level, understory shaded
 /// @return void
 void netRadiation(double shortRad_global, double CosZs, double temp_o, double temp_u, double temp_g,
                   double lai_o, double lai_u, double lai_os, double lai_us,  // LAI of overstorey and understorey, with and without stem
-                  double lai_o_sunlit, double lai_o_shaded, double lai_u_sunlit, double lai_u_shaded,
+                //   double lai_o_sunlit, double lai_o_shaded, double lai_u_sunlit, double lai_u_shaded,
+                  Leaf lai,
                   double clumping, double temp_air, double rh,
                   double albedo_snow_v, double albedo_snow_n, double percentArea_snow_o, double percentArea_snow_u, double percent_snow_g,
                   double albedo_v_o, double albedo_n_o, double albedo_v_u, double albedo_n_u, double albedo_v_g, double albedo_n_g,
                   double* netRad_o, double* netRad_u, double* netRad_g,
-                  double* netRadLeaf_o_sunlit, double* netRadLeaf_o_shaded, double* netRadLeaf_u_sunlit, double* netRadLeaf_u_shaded,
-                  double* netShortRadLeaf_o_sunlit, double* netShortRadLeaf_o_shaded, double* netShortRadLeaf_u_sunlit, double* netShortRadLeaf_u_shaded) {
+                  Leaf* netRadLeaf,
+                  Leaf* netShortRadLeaf
+                //   double* netRadLeaf.o_sunlit, double* netRadLeaf.o_shaded, double* netRadLeaf.u_sunlit, double* netRadLeaf.u_shaded,
+                //   double* netShortRadLeaf.o_sunlit, double* netShortRadLeaf.o_shaded, double* netShortRadLeaf.u_sunlit, double* nenetShortRadLeaf.u_shaded
+                  ) 
+{
     double netShortRad_o, netShortRad_u, netShortRad_g;                                                                    // net short wave radiation on overstorey, understorey and ground
     double netShortRad_o_dir, netShortRad_o_df, netShortRad_u_dir, netShortRad_u_df, netShortRad_g_dir, netShortRad_g_df;  // direct and diffuse part of net solar radiation
     double shortRad_dir, shortRad_df;                                                                                      //direct and diffuse radiation on top of the canopy
-    double netLongRadLeaf_o_sunlit, netLongRadLeaf_o_shaded, netLongRadLeaf_u_sunlit, netLongRadLeaf_u_shaded;
+    Leaf netLongRadLeaf;
+    // double netLongRadLeaf.o_sunlit, netLongRadLeaf.o_shaded, netLongRadLeaf.u_sunlit, netLongRadLeaf.u_shaded;
 
     double netLongRad_o, netLongRad_u, netLongRad_g;  // net long wave radiation
     double shortRadLeaf_o_dir, shortRadLeaf_u_dir, shortRadLeaf_o_df, shortRadLeaf_u_df;
@@ -208,76 +214,76 @@ void netRadiation(double shortRad_global, double CosZs, double temp_o, double te
 
     //overstorey sunlit leaves
 
-    if (lai_o_sunlit > 0) {
-        *netShortRadLeaf_o_sunlit = (shortRadLeaf_o_dir + shortRadLeaf_o_df) * (1 - albedo_o);  // diffuse
-        netLongRadLeaf_o_sunlit = netLongRad_o / lai_os;                                        // leaf level net long
-        *netRadLeaf_o_sunlit = *netShortRadLeaf_o_sunlit + netLongRadLeaf_o_sunlit;
+    if (lai.o_sunlit > 0) {
+        netShortRadLeaf->o_sunlit = (shortRadLeaf_o_dir + shortRadLeaf_o_df) * (1 - albedo_o);  // diffuse
+        netLongRadLeaf.o_sunlit = netLongRad_o / lai_os;                                        // leaf level net long
+        netRadLeaf->o_sunlit = netShortRadLeaf->o_sunlit + netLongRadLeaf.o_sunlit;
     } else {
-        *netShortRadLeaf_o_sunlit = (shortRadLeaf_o_dir + shortRadLeaf_o_df) * (1 - albedo_o);
-        netLongRadLeaf_o_sunlit = netLongRad_o;
-        *netRadLeaf_o_sunlit = *netShortRadLeaf_o_sunlit + netLongRadLeaf_o_sunlit;
+        netShortRadLeaf->o_sunlit = (shortRadLeaf_o_dir + shortRadLeaf_o_df) * (1 - albedo_o);
+        netLongRadLeaf.o_sunlit = netLongRad_o;
+        netRadLeaf->o_sunlit = netShortRadLeaf->o_sunlit + netLongRadLeaf.o_sunlit;
     }
 
     // overstorey shaded leaf
-    if (lai_o_shaded > 0) {
-        *netShortRadLeaf_o_shaded = shortRadLeaf_o_df * (1 - albedo_o);  // diffuse
-        netLongRadLeaf_o_shaded = netLongRad_o / lai_os;
+    if (lai.o_shaded > 0) {
+        netShortRadLeaf->o_shaded = shortRadLeaf_o_df * (1 - albedo_o);  // diffuse
+        netLongRadLeaf.o_shaded = netLongRad_o / lai_os;
 
-        *netRadLeaf_o_shaded = *netShortRadLeaf_o_shaded + netLongRadLeaf_o_shaded;
+        netRadLeaf->o_shaded = netShortRadLeaf->o_shaded + netLongRadLeaf.o_shaded;
     } else {
-        *netShortRadLeaf_o_shaded = shortRadLeaf_o_df * (1 - albedo_o);  // diffuse
-        netLongRadLeaf_o_shaded = netLongRad_o;
-        *netRadLeaf_o_shaded = *netShortRadLeaf_o_shaded + netLongRadLeaf_o_shaded;
+        netShortRadLeaf->o_shaded = shortRadLeaf_o_df * (1 - albedo_o);  // diffuse
+        netLongRadLeaf.o_shaded = netLongRad_o;
+        netRadLeaf->o_shaded = netShortRadLeaf->o_shaded + netLongRadLeaf.o_shaded;
     }
 
     // understorey sunlit leaf
-    if (lai_u_sunlit > 0) {
-        *netShortRadLeaf_u_sunlit = (shortRadLeaf_u_dir + shortRadLeaf_u_df) * (1 - albedo_u);
-        netLongRadLeaf_u_sunlit = netLongRad_u / lai_us;
+    if (lai.u_sunlit > 0) {
+        netShortRadLeaf->u_sunlit = (shortRadLeaf_u_dir + shortRadLeaf_u_df) * (1 - albedo_u);
+        netLongRadLeaf.u_sunlit = netLongRad_u / lai_us;
 
-        *netRadLeaf_u_sunlit = *netShortRadLeaf_u_sunlit + netLongRadLeaf_u_sunlit;
+        netRadLeaf->u_sunlit = netShortRadLeaf->u_sunlit + netLongRadLeaf.u_sunlit;
     } else {
-        *netShortRadLeaf_u_sunlit = (shortRadLeaf_u_dir + shortRadLeaf_u_df) * (1 - albedo_u);
-        netLongRadLeaf_u_sunlit = netLongRad_u;
+        netShortRadLeaf->u_sunlit = (shortRadLeaf_u_dir + shortRadLeaf_u_df) * (1 - albedo_u);
+        netLongRadLeaf.u_sunlit = netLongRad_u;
 
-        *netRadLeaf_u_sunlit = *netShortRadLeaf_u_sunlit + netLongRadLeaf_u_sunlit;
+        netRadLeaf->u_sunlit = netShortRadLeaf->u_sunlit + netLongRadLeaf.u_sunlit;
     }
 
     // understorey shaded leaf
-    if (lai_u_shaded > 0) {
-        *netShortRadLeaf_u_shaded = shortRadLeaf_u_df * (1 - albedo_u);
-        netLongRadLeaf_u_shaded = netLongRad_u / lai_us;
+    if (lai.u_shaded > 0) {
+        netShortRadLeaf->u_shaded = shortRadLeaf_u_df * (1 - albedo_u);
+        netLongRadLeaf.u_shaded = netLongRad_u / lai_us;
 
-        *netRadLeaf_u_shaded = *netShortRadLeaf_u_shaded + netLongRadLeaf_u_shaded;
+        netRadLeaf->u_shaded = netShortRadLeaf->u_shaded + netLongRadLeaf.u_shaded;
     } else {
-        *netShortRadLeaf_u_shaded = shortRadLeaf_u_df * (1 - albedo_u);
-        netLongRadLeaf_u_shaded = netLongRad_u;
+        netShortRadLeaf->u_shaded = shortRadLeaf_u_df * (1 - albedo_u);
+        netLongRadLeaf.u_shaded = netLongRad_u;
 
-        *netRadLeaf_u_shaded = *netShortRadLeaf_u_shaded + netLongRadLeaf_u_shaded;
+        netRadLeaf->u_shaded = netShortRadLeaf->u_shaded + netLongRadLeaf.u_shaded;
     }
 
     //  leaf level net radiation: original way, use canopy radiation divided by LAI.
     //  here calculate net radiation for all leaf component again use the original method.
     //  These code could be commented, because not right, I just put it here to validate model.
     //    if(lai_o_sunlit>0)
-    //        *netRadLeaf_o_sunlit = netShortRad_o_dir/lai_o_sunlit + netLongRad_o/lai_os;
+    //        netRadLeaf->o_sunlit = netShortRad_o_dir/lai_o_sunlit + netLongRad_o/lai_os;
     //    else
-    //        *netRadLeaf_o_sunlit = netShortRad_o_dir + netLongRad_o;
+    //        netRadLeaf->o_sunlit = netShortRad_o_dir + netLongRad_o;
     //
     //    if(lai_o_shaded>0)
-    //        *netRadLeaf_o_shaded = netShortRad_o_df/lai_o_shaded + netLongRad_o/lai_os;
+    //        netRadLeaf->o_shaded = netShortRad_o_df/lai_o_shaded + netLongRad_o/lai_os;
     //    else
-    //        *netRadLeaf_o_shaded = netShortRad_o_df + netLongRad_o;
+    //        netRadLeaf->o_shaded = netShortRad_o_df + netLongRad_o;
     //
     //
     //    if(lai_u_sunlit>0)
-    //        *netRadLeaf_u_sunlit = netShortRad_u_dir/lai_u_sunlit + netLongRad_u/lai_us;
+    //        netRadLeaf->u_sunlit = netShortRad_u_dir/lai_u_sunlit + netLongRad_u/lai_us;
     //    else
-    //        *netRadLeaf_u_sunlit = netShortRad_u_dir + netLongRad_u;
+    //        netRadLeaf->u_sunlit = netShortRad_u_dir + netLongRad_u;
     //
     //
     //    if(lai_u_shaded>0)
-    //        *netRadLeaf_u_shaded = netShortRad_u_df/lai_u_shaded + netLongRad_u/lai_us;
+    //        netRadLeaf->u_shaded = netShortRad_u_df/lai_u_shaded + netLongRad_u/lai_us;
     //    else
-    //        *netRadLeaf_u_shaded =netShortRad_u_df + netLongRad_u;
+    //        netRadLeaf->u_shaded =netShortRad_u_df + netLongRad_u;
 }

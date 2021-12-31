@@ -12,11 +12,6 @@ Leaf_Temperature_ <- function(Tair, VPD_air, Cp_ca, Gw, Gww, Gh, Xc_sl, radiatio
 }
 
 #' @export
-lai2_ <- function(clumping, CosZs, stem_o, stem_u, lai_o, lai_u) {
-    .Call(`_rBEPS_lai2_`, clumping, CosZs, stem_o, stem_u, lai_o, lai_u)
-}
-
-#' @export
 meteo_pack_ <- function(temp, rh) {
     .Call(`_rBEPS_meteo_pack_`, temp, rh)
 }

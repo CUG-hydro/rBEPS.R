@@ -22,26 +22,26 @@ double Leaf_Temperature_(double Tair, double VPD_air, double Cp_ca,
                             Gw, Gww, Gh, Xc_sl, radiation, constrain);
 }
 
-//' @export
-// [[Rcpp::export]]
-NumericVector lai2_(double clumping, double CosZs, double stem_o, double stem_u, double lai_o, double lai_u) {
+// //' @export
+// // [[Rcpp::export]]
+// NumericVector lai2_(double clumping, double CosZs, double stem_o, double stem_u, double lai_o, double lai_u) {
 
-    double lai_o_sunlit, lai_o_shaded, lai_u_sunlit, lai_u_shaded, 
-        PAI_o_sunlit, PAI_o_shaded, PAI_u_sunlit, PAI_u_shaded;
+//     double lai_o_sunlit, lai_o_shaded, lai_u_sunlit, lai_u_shaded, 
+//         PAI_o_sunlit, PAI_o_shaded, PAI_u_sunlit, PAI_u_shaded;
 
-    lai2(clumping, CosZs, stem_o, stem_u, lai_o, lai_u,
-          &lai_o_sunlit, &lai_o_shaded, &lai_u_sunlit, &lai_u_shaded,
-          &PAI_o_sunlit, &PAI_o_shaded, &PAI_u_sunlit, &PAI_u_shaded);
+//     lai2(clumping, CosZs, stem_o, stem_u, lai_o, lai_u,
+//           &lai_o_sunlit, &lai_o_shaded, &lai_u_sunlit, &lai_u_shaded,
+//           &PAI_o_sunlit, &PAI_o_shaded, &PAI_u_sunlit, &PAI_u_shaded);
     
-    auto v = NumericVector::create(
-        lai_o_sunlit, lai_o_shaded, lai_u_sunlit, lai_u_shaded, 
-        PAI_o_sunlit, PAI_o_shaded, PAI_u_sunlit, PAI_u_shaded);
-    v.names() = CharacterVector({
-        "lai_o_sunlit", "lai_o_shaded", "lai_u_sunlit", "lai_u_shaded", 
-        "PAI_o_sunlit", "PAI_o_shaded", "PAI_u_sunlit", "PAI_u_shaded"
-    });
-    return v;
-}
+//     auto v = NumericVector::create(
+//         lai_o_sunlit, lai_o_shaded, lai_u_sunlit, lai_u_shaded, 
+//         PAI_o_sunlit, PAI_o_shaded, PAI_u_sunlit, PAI_u_shaded);
+//     v.names() = CharacterVector({
+//         "lai_o_sunlit", "lai_o_shaded", "lai_u_sunlit", "lai_u_shaded", 
+//         "PAI_o_sunlit", "PAI_o_shaded", "PAI_u_sunlit", "PAI_u_shaded"
+//     });
+//     return v;
+// }
 
 //' @export
 // [[Rcpp::export]]

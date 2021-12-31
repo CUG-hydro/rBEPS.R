@@ -43,22 +43,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// lai2_
-NumericVector lai2_(double clumping, double CosZs, double stem_o, double stem_u, double lai_o, double lai_u);
-RcppExport SEXP _rBEPS_lai2_(SEXP clumpingSEXP, SEXP CosZsSEXP, SEXP stem_oSEXP, SEXP stem_uSEXP, SEXP lai_oSEXP, SEXP lai_uSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< double >::type clumping(clumpingSEXP);
-    Rcpp::traits::input_parameter< double >::type CosZs(CosZsSEXP);
-    Rcpp::traits::input_parameter< double >::type stem_o(stem_oSEXP);
-    Rcpp::traits::input_parameter< double >::type stem_u(stem_uSEXP);
-    Rcpp::traits::input_parameter< double >::type lai_o(lai_oSEXP);
-    Rcpp::traits::input_parameter< double >::type lai_u(lai_uSEXP);
-    rcpp_result_gen = Rcpp::wrap(lai2_(clumping, CosZs, stem_o, stem_u, lai_o, lai_u));
-    return rcpp_result_gen;
-END_RCPP
-}
 // meteo_pack_
 NumericVector meteo_pack_(double temp, double rh);
 RcppExport SEXP _rBEPS_meteo_pack_(SEXP tempSEXP, SEXP rhSEXP) {
@@ -134,7 +118,6 @@ END_RCPP
 static const R_CallMethodDef CallEntries[] = {
     {"_rBEPS_beps_main", (DL_FUNC) &_rBEPS_beps_main, 4},
     {"_rBEPS_Leaf_Temperature_", (DL_FUNC) &_rBEPS_Leaf_Temperature_, 9},
-    {"_rBEPS_lai2_", (DL_FUNC) &_rBEPS_lai2_, 6},
     {"_rBEPS_meteo_pack_", (DL_FUNC) &_rBEPS_meteo_pack_, 2},
     {"_rBEPS_s_coszs_", (DL_FUNC) &_rBEPS_s_coszs_, 4},
     {"_rBEPS_readcoef_", (DL_FUNC) &_rBEPS_readcoef_, 2},

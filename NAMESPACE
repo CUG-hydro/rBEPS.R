@@ -2,7 +2,8 @@
 
 export(Leaf_Temperature_)
 export(beps)
-export(lai2_)
+export(beps_main)
+export(meteo_pack_)
 export(readcoef_)
 export(s_coszs_)
 importFrom(Rcpp,sourceCpp)
