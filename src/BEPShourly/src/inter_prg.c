@@ -334,7 +334,6 @@ void inter_prg(int jday, int rstep, double lai, double clumping,
             num = num + 1;
 
             /***** Aerodynamic_conductance module by G.Mo  *****/
-
             aerodynamic_conductance(canopyh_o, canopyh_u, height_wind_sp, clumping, temp_air, wind_sp, GH_o,
                                     lai_o + stem_o, lai_u + stem_u, &ra_o, &ra_u, &ra_g, &G_o_a, &G_o_b, &G_u_a, &G_u_b);
 
@@ -353,7 +352,6 @@ void inter_prg(int jday, int rstep, double lai, double clumping,
             Tcu = (Tc_old.u_sunlit * LAI_u_sunlit + Tc_old.u_shaded * LAI_u_shaded) / (LAI_u_sunlit + LAI_u_shaded);
 
             /*****  Net radiation at canopy and leaf level module by X.Luo  *****/
-
             netRadiation(Ks, CosZs, Tco, Tcu, temp_grd, lai_o, lai_u, lai_o + stem_o, lai_u + stem_u, LAI_o_sunlit, LAI_o_shaded, LAI_u_sunlit, LAI_u_shaded,
                          clumping, temp_air, rh_air, alpha_v_sw[kkk], alpha_n_sw[kkk], percentArea_snow_o, percentArea_snow_u,
                          Xg_snow[kkk], alpha_v_o, alpha_n_o, alpha_v_u, alpha_n_u, alpha_v_g, alpha_n_g,
@@ -491,7 +489,6 @@ void inter_prg(int jday, int rstep, double lai, double clumping,
         rainfall_stage2(Eil_o[kkk], Eil_u[kkk], &Wcl_o[kkk], &Wcl_u[kkk]);
 
         /*****  Snow pack stage 2 by X. Luo  *****/
-
         snowpack_stage2(EiS_o[kkk], EiS_u[kkk], &Wcs_o[kkk], &Wcs_u[kkk]);
 
         /*****  Evaporation from soil module by X. Luo  *****/
@@ -503,9 +500,7 @@ void inter_prg(int jday, int rstep, double lai, double clumping,
                          &Evap_soil[kkk], &Evap_SW[kkk], &Evap_SS[kkk]);
 
         /*****  Soil Thermal Conductivity module by L. He  *****/
-
         UpdateSoilThermalConductivity(soilp);
-
         Update_Cs(soilp);
 
         /*****  Surface temperature by X. Luo  *****/
@@ -532,11 +527,9 @@ void inter_prg(int jday, int rstep, double lai, double clumping,
         soilp->temp_soil_c[0] = Tm[0][kkk];
 
         /*****  Snow Pack Stage 3 module by X. Luo  *****/
-
         snowpack_stage3(temp_air, Tsn0[kkk], Tsn0[kkk - 1], rho_snow[kkk], &Zsp, &Zp, &Wg_snow[kkk]);
 
         /*****  Sensible heat flux module by X. Luo  *****/
-
         sensible_heat(Tc_new, Ts0[kkk], temp_air, rh_air,
                       Gh_o_sunlit, Gh_o_shaded, Gh_u_sunlit, Gh_u_shaded, Gheat_g,
                       LAI_o_sunlit, LAI_o_shaded, LAI_u_sunlit, LAI_u_shaded,
@@ -552,16 +545,13 @@ void inter_prg(int jday, int rstep, double lai, double clumping,
         soilp->G[0] = G[0][kkk];
 
         UpdateHeatFlux(soilp, Xg_snow[kkk], lambda_snow[kkk], Tsn0[kkk], temp_air, kstep);
-
         Soil_Water_Uptake(soilp, Trans_o[kkk], Trans_u[kkk], Evap_soil[kkk]);
 
         soilp->r_rain_g = r_rain_g[kkk];
         soilp->Zp = Zp;
 
         UpdateSoilMoisture(soilp, kstep);
-
         Zp = soilp->Zp;
-
     }  // The end of kkk loop
 
     kkk = kloop;  // the last step

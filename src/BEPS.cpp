@@ -161,8 +161,8 @@ NumericMatrix beps_main(String inp_dir, DataFrame d_metro, NumericVector LAI, Nu
             // Hourly output
             outp[1] = mid_res->GPP;
             outp[2] = mid_res->Trans + mid_res->Evap;
-            outp[3] = mid_res->NEP;
-            outp[4] = mid_res->npp_o + mid_res->npp_u;
+            // outp[3] = mid_res->NEP;
+            // outp[4] = mid_res->npp_o + mid_res->npp_u;
             
             NumericVector v = results2vec(mid_res);
             res(k - 1, _) = v;

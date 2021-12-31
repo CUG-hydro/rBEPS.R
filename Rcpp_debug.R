@@ -1,5 +1,4 @@
 #! /usr/bin/Rscript
-
 devtools::load_all()
 # beps(system.file("examples/input", package = "rBEPS"))
 
@@ -25,8 +24,15 @@ opts <- c(
     j_end = 1
 )
 
+func <- function() {
+    beps_main(indir, d_metro, LAI, opts) %>% mat2df() %>% 
+        dplyr::select(-starts_with("npp"), -ends_with("resp"), -NEP) %>% 
+        .[, -(1:4)]
+}
+
 indir <- "inst/examples/input"
-res1 = beps_main(indir, d_metro, LAI, opts) %>% mat2df()
-res2 = beps_main(indir, d_metro, LAI, opts) %>% mat2df()
-diff = tibble::as_tibble(res1 - res2) %>% 
-    dplyr::select(-starts_with("npp"), -ends_with("resp"), -NEP)
+res1 = func(); print(res1)
+res2 = func(); print(res2)
+
+diff = tibble::as_tibble(res1 - res2)
+print(diff)
