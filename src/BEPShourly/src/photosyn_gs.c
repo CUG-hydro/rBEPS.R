@@ -123,7 +123,7 @@
 void photosynthesis(double temp_leaf_p, double rad_leaf, double e_air, double g_lb_w, double vc_opt,
                     double f_soilwater, double b_h2o, double m_h2o, double cii, double temp_leaf_c, double LH_leaf,
                     double* Gs_w, double* aphoto, double* ci) {
-    double air_pres = 101.325;  // air pressure (kPa)
+    // double air_pres = 101.325;  // air pressure (kPa)
     double ca;                  // atmospheric co2 concentration (ppm)
     double iphoton;             // incident photosynthetic photon flux density (PPFD) umol m-2 s-1
     double g_lb_c;              // leaf laminar boundary layer condunctance to CO2 (mol m-2 s-1)
@@ -164,7 +164,7 @@ void photosynthesis(double temp_leaf_p, double rad_leaf, double e_air, double g_
     double ang_L;
 
     double j_sucrose;        // net photosynthesis rate limited by sucrose synthesis (umol m-2 s-1)
-    double wc, wj, psguess;  // gross photosynthesis rate limited by light (umol m-2 s-1)
+    double wc, wj; // psguess;  // gross photosynthesis rate limited by light (umol m-2 s-1)
 
     double Aquad, Bquad, Cquad;
     double b_ps, a_ps, e_ps, d_ps;
@@ -265,13 +265,13 @@ void photosynthesis(double temp_leaf_p, double rad_leaf, double e_air, double g_
 
     if (wj < wc) {
         // for Harley and Farquhar type model for Wj
-        psguess = wj;
+        // psguess = wj;
         a_ps = j_photon;
         b_ps = 8.0 * gammac;
         e_ps = 4.0;
         d_ps = gammac;
     } else {
-        psguess = wc;
+        // psguess = wc;
         a_ps = vcmax;
         b_ps = bc;
         e_ps = 1.0;

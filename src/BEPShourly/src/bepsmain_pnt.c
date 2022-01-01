@@ -13,12 +13,12 @@ int beps_c(char *inp_dir) {
     float lon, lat;
     float lcv, stypev, stv, swv, sdpv;
     
-    float ccdv, cssdv, csmdv, cfsdv, cfmdv, csmv, cmv, csv, cpv;
+    // float ccdv, cssdv, csmdv, cfsdv, cfmdv, csmv, cmv, csv, cpv;
     float rv, tv, hv, pv, wv, civ;
 
     float lai_p[nday];
     float m_rad[nday][24], m_tem[nday][24], m_hum[nday][24], m_pre[nday][24], m_wind[nday][24];
-    double tem, hum, st, sw, snowdepth, temp_soil1, temp_soil[layer + 1];
+    double tem, hum, st, sw, snowdepth ; // temp_soil1, temp_soil[layer + 1];
 
     double lai, clumping;
     // parameters for respiration
@@ -26,12 +26,12 @@ int beps_c(char *inp_dir) {
     // double Ccd[5], Cssd[5], Csmd[5], Cfsd[5], Cfmd[5], Csm[5], Cm[5], Cs[5], Cp[5];
 
     char site[33], lc_fn[240], cp_fn[240], lai_fn[240], me_fn[240], outp_fn[240];
-    FILE *lc_ptr, *cp_ptr, *laif_ptr, *me_ptr, *outp_ptr;
+    FILE *lc_ptr, *laif_ptr, *me_ptr, *outp_ptr; // , *cp_ptr
 
     double es, esd;
-    double theta_vfc[layer + 1], theta_vwp[layer + 1], thermal_s[layer + 1];
-    double psi_sat[layer + 1], bb[layer + 1], fei[layer + 1];
-    double Ksat[layer + 1], theta[layer + 1];
+    // double theta_vfc[layer + 1], theta_vwp[layer + 1], thermal_s[layer + 1];
+    // double psi_sat[layer + 1], bb[layer + 1], fei[layer + 1];
+    // double Ksat[layer + 1], theta[layer + 1];
     double coef[100];
     double CosZs;
     double parameter[50];

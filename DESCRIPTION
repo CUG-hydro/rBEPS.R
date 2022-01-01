@@ -1,10 +1,10 @@
 Package: rBEPS
 Type: Package
 Title: What the Package Does in One 'Title Case' Line
-Version: 1.0
-Date: 2021-02-11
-Author: Your Name
-Maintainer: Your Name <your@email.com>
+Version: 0.1.1
+Authors@R: c(
+  person("Dongdong", "Kong", role = c("aut", "cre"), 
+         email = "kongdd.sysu@gmail.com", comment = c(ORCID = "0000-0003-1836-8172")))
 Description: One paragraph description of what the package does as one or more full sentences.
 License: GPL (>= 3)
 Imports: 

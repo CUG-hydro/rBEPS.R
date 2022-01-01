@@ -27,46 +27,45 @@ void inter_prg(int jday, int rstep, double lai, double clumping,
     double lai_o, lai_u;
     double stem_o, stem_u;
 
-    double d_soil[layer + 1];
     double Zsp;                   // the depth of snow on the surface
-    double Zp, Zp1 = 0, Zp2 = 0;  // depth of pounded water on the surface
+    double Zp; // Zp1 = 0, Zp2 = 0;  // depth of pounded water on the surface
     double height_wind_sp;        // height of the Va measured for calculation of L
+    double d_soil[layer + 1] = {0};
+    double Qhc_o[120] = {0}, Qhc_u[120] = {0}, Qhg[120] = {0};  // The sensible heat flux from canopy and ground
+    double G[layer + 2][120] = {0};                 // the heat flux into the canopy of over story --in W/m^2
 
-    double Qhc_o[120], Qhc_u[120], Qhg[120];  // The sensible heat flux from canopy and ground
-    double G[layer + 2][120];                 // the heat flux into the canopy of over story --in W/m^2
+    double Wcl_o[120] = {0}, Wcs_o[120] = {0};  // the masses od rain and snow on the canopy
+    double Xcl_o[120] = {0}, Xcs_o[120] = {0};  // the fraction of canopy covered by liquid water and snow
+    double Wcl_u[120] = {0}, Wcs_u[120] = {0};  // the masses of rain and snow on the canopy
+    double Xcl_u[120] = {0}, Xcs_u[120] = {0};  // the fraction of canopy covered by liquid water and snow
 
-    double Wcl_o[120], Wcs_o[120];  // the masses od rain and snow on the canopy
-    double Xcl_o[120], Xcs_o[120];  // the fraction of canopy covered by liquid water and snow
-    double Wcl_u[120], Wcs_u[120];  // the masses of rain and snow on the canopy
-    double Xcl_u[120], Xcs_u[120];  // the fraction of canopy covered by liquid water and snow
+    double r_rain_g[120] = {0};                // the rainfall rate, on ground surface  m/s
+    double rho_snow[120] = {0};                // density of snow
+    double alpha_v_sw[120] = {0}, alpha_n_sw[120] = {0};  // albedo of snow
+    double Wg_snow[120] = {0};                           // the amount of snow on the ground
+    double Xg_snow[120] = {0};                           // the fraction of the ground surface covered by snow
+    double Ac_snow_u[120] = {0};                         // the areas of canopy covered in snow, o--overstory and  u-- understory
+    double Ac_snow_o[120] = {0};
 
-    double r_rain_g[120];                     // the rainfall rate, on ground surface  m/s
-    double rho_snow[120];                     // density of snow
-    double alpha_v_sw[120], alpha_n_sw[120];  // albedo of snow
-    double Wg_snow[120];                      // the amount of snow on the ground
-    double Xg_snow[120];                      // the fraction of the ground surface covered by snow
-    double Ac_snow_u[120];                    // the areas of canopy covered in snow, o--overstory and  u-- understory
-    double Ac_snow_o[120];
+    double Ts0[120] = {0}, Tsn0[120] = {0}, Tsm0[120] = {0}, Tsn1[120] = {0}, Tsn2[120] = {0};  // surface temperature
+    double Tc_u[120] = {0};                                                                 // the effective canopy temperature in K
+    double Tm[layer + 2][120] = {0};                                                        // Tb[layer+2][120],soil temperature at the bottom and the middle of each layer*/
 
-    double Ts0[120], Tsn0[120], Tsm0[120], Tsn1[120], Tsn2[120];  // surface temperature
-    double Tc_u[120];                                             // the effective canopy temperature in K
-    double Tm[layer + 2][120];                                    // Tb[layer+2][120],soil temperature at the bottom and the middle of each layer*/
-
-    double lambda[layer + 2];   // thermal conductivity of each soil layer;*/
-    double Cs[layer + 2][120];  // the soil volumetric heat capacity of each soil layer, j+kkk/m^3/K*/
+    double lambda[layer + 2] = {0};  // thermal conductivity of each soil layer;*/
+    double Cs[layer + 2][120] = {0};  // the soil volumetric heat capacity of each soil layer, j+kkk/m^3/K*/
 
     double temp_air;                 // air temperature */
     double precip, rh_air, wind_sp;  // precipitation in meters, relative humidity (%), wind speed in m/s */
     double temp_grd;                 // ground temperature */
 
-    double Eil_o[120], EiS_o[120];      // the evaporation rate of intercepted water of overstory--in kg/m^2/s; l-- water; S-snow
-    double Eil_u[120], EiS_u[120];      // the evaporation rate of intercepted water of overstory--in kg/m^2/s; l-- water; S-snow of intercepted water--in kg/m^2/s
-    double Trans_o[120], Trans_u[120];  // transpiration from overstory and understory canopies
-    double Evap_soil[120];              // evaporation from soil
-    double Evap_SW[120];                // evaporation from water pond
-    double Evap_SS[120];                // evaporation from snow pack
+    double Eil_o[120] = {0}, EiS_o[120] = {0};  // the evaporation rate of intercepted water of overstory--in kg/m^2/s; l-- water; S-snow
+    double Eil_u[120] = {0}, EiS_u[120] = {0};  // the evaporation rate of intercepted water of overstory--in kg/m^2/s; l-- water; S-snow of intercepted water--in kg/m^2/s
+    double Trans_o[120] = {0}, Trans_u[120] = {0};  // transpiration from overstory and understory canopies
+    double Evap_soil[120] = {0};                   // evaporation from soil
+    double Evap_SW[120] = {0};                     // evaporation from water pond
+    double Evap_SS[120] = {0};                     // evaporation from snow pack
 
-    double lambda_snow[120];  // the effective thermal conductivity of snow --in m^2/s
+    double lambda_snow[120] = {0};  // the effective thermal conductivity of snow --in m^2/s
     double e_a10;             // the vapour partial pressure of water --in kPa(1mb=100Pa=0.1kpa)
 
     double Lv_liquid;                  // the latent heat of evaporation from liquid at air temperature=Ta, in j+kkk/kg
@@ -83,9 +82,9 @@ void inter_prg(int jday, int rstep, double lai, double clumping,
 
     double q_ca;  // the actual canopy stomatal resistance  --in s/m
 
-    double ip = 0;  // the cumulative infiltration at the time of ponding   --in m/s
-    double Inf = 0;
-    double zr = 0.8;
+    // double ip = 0;  // the cumulative infiltration at the time of ponding   --in m/s
+    // double Inf = 0;
+    // double zr = 0.8;
     double Cpd = 1004.65;   // 1013 J kg-1 degC-1
     double rho_w = 1025.0;  // density of water
 
@@ -107,7 +106,8 @@ void inter_prg(int jday, int rstep, double lai, double clumping,
     Leaf radiation; // net radiation of leaves
     Leaf R;         // Rabs, absorbed solar radiation 
     Leaf leleaf;    // leaf latent heat flux (mol m-2 s-1) 
-    Leaf GPP, LAI, PAI;
+    Leaf GPP, LAI;
+    Leaf PAI;       // PAI = LAI + SAI; // double LAIo_sunlit, LAIo_shaded, LAIu_sunlit, LAIu_shaded;
 
     double radiation_o, radiation_u, radiation_g;    
     double f_soilwater;                                                         // an empirical parameter describing the relative availability of soil water for plants
@@ -116,13 +116,11 @@ void inter_prg(int jday, int rstep, double lai, double clumping,
 
     double Tco, Tcu, slope;
     double H_o_sunlit, H_o_shaded;                                  // sensible heat flux from leaves
-    // double LAIo_sunlit, LAIo_shaded, LAIu_sunlit, LAIu_shaded;
-
+    
     double VPS_air;
+    double VPD_air;  // Vapor pressure deficit term
     double GH_o, G_o_a, G_o_b, G_u_a, G_u_b;
     double canopyh_o, canopyh_u;
-
-    double VPD_air;  // Vapor pressure deficit term
 
     double mass_water_g;
     double percentArea_snow_o, percentArea_snow_u;
@@ -148,7 +146,6 @@ void inter_prg(int jday, int rstep, double lai, double clumping,
     b_h2o = parameter[34];
 
     /*****  Vcmax-Nitrogen calculations，by G.Mo，Apr. 2011  *****/
-
     if (CosZs > 0)  // day time
     {
         K = G_theta * clumping / CosZs;  // G_theta = 0.5 assuming a spherical leaf angle distribution
@@ -170,7 +167,6 @@ void inter_prg(int jday, int rstep, double lai, double clumping,
     }
 
     /*****  LAI calculation module, by B. Chen  *****/
-
     lai_o = lai;
     if (lai < 0.1) lai_o = 0.1;
     landcover = (int)parameter[4];
@@ -306,10 +302,9 @@ void inter_prg(int jday, int rstep, double lai, double clumping,
         temp_grd = temp_air;  // ground temperature substituted by air temperature
 
         num = 0;
-        while (1)  // iteration for BWB equation until results converge
-        {
+        // iteration for BWB equation until results converge
+        while (1) {
             num = num + 1;
-
             /***** Aerodynamic_conductance module by G.Mo  *****/
             aerodynamic_conductance(canopyh_o, canopyh_u, height_wind_sp, clumping, temp_air, wind_sp, GH_o,
                                     lai_o + stem_o, lai_u + stem_u, &ra_o, &ra_u, &ra_g, &G_o_a, &G_o_b, &G_u_a, &G_u_b);
@@ -363,24 +358,22 @@ void inter_prg(int jday, int rstep, double lai, double clumping,
                 init_leaf_dbl(&Ac, 0.0001);
                 init_leaf_dbl(&Cs_new, CO2_air);
                 init_leaf_dbl(&Ci_new, CO2_air * 0.7);
-                init_leaf_dbl(&Cs_new, CO2_air * 0.7 * 0.8);
+                init_leaf_dbl(&Cc_new, CO2_air * 0.7 * 0.8); // not used
             }
 
             init_leaf_struct(&Ci_old, &Ci_new);
             init_leaf_struct(&Cs_old, &Cs_new);
             init_leaf_struct(&Gs_old, &Gs_new);  // m/s
                                      
-            Gw.o_sunlit = 1.0 / (1.0 / G_o_a + 1.0 / G_o_b + 1.0 / Gs_new.o_sunlit);  //conductance of sunlit leaves of overstorey for water
-            Gc.o_sunlit = 1.0 / (1.0 / G_o_a + 1.4 / G_o_b + 1.6 / Gs_new.o_sunlit);  //conductance of sunlit leaves of overstorey for CO2
+            Gw.o_sunlit = 1.0 / (1.0 / G_o_a + 1.0 / G_o_b + 1.0 / Gs_new.o_sunlit);  //conductance of leaves of for water
+            Gw.o_shaded = 1.0 / (1.0 / G_o_a + 1.0 / G_o_b + 1.0 / Gs_new.o_shaded);  
+            Gw.u_sunlit = 1.0 / (1.0 / G_u_a + 1.0 / G_u_b + 1.0 / Gs_new.u_sunlit);  
+            Gw.u_shaded = 1.0 / (1.0 / G_u_a + 1.0 / G_u_b + 1.0 / Gs_new.u_shaded);
 
-            Gw.o_shaded = 1.0 / (1.0 / G_o_a + 1.0 / G_o_b + 1.0 / Gs_new.o_shaded);  //conductance of sunlit leaves of overstorey for water
-            Gc.o_shaded = 1.0 / (1.0 / G_o_a + 1.4 / G_o_b + 1.6 / Gs_new.o_shaded);  //conductance of sunlit leaves of overstorey for CO2
-
-            Gw.u_sunlit = 1.0 / (1.0 / G_u_a + 1.0 / G_u_b + 1.0 / Gs_new.u_sunlit);  //conductance of sunlit leaves of overstorey for water
-            Gc.u_sunlit = 1.0 / (1.0 / G_u_a + 1.4 / G_u_b + 1.6 / Gs_new.u_sunlit);  //conductance of sunlit leaves of overstorey for CO2
-
-            Gw.u_shaded = 1.0 / (1.0 / G_u_a + 1.0 / G_u_b + 1.0 / Gs_new.u_shaded);  //conductance of sunlit leaves of overstorey for water
-            Gc.u_shaded = 1.0 / (1.0 / G_u_a + 1.4 / G_u_b + 1.6 / Gs_new.u_shaded);  //conductance of sunlit leaves of overstorey for CO2
+            Gc.o_sunlit = 1.0 / (1.0 / G_o_a + 1.4 / G_o_b + 1.6 / Gs_new.o_sunlit);  // conductance of leaves of for CO2
+            Gc.o_shaded = 1.0 / (1.0 / G_o_a + 1.4 / G_o_b + 1.6 / Gs_new.o_shaded);  
+            Gc.u_sunlit = 1.0 / (1.0 / G_u_a + 1.4 / G_u_b + 1.6 / Gs_new.u_sunlit);  
+            Gc.u_shaded = 1.0 / (1.0 / G_u_a + 1.4 / G_u_b + 1.6 / Gs_new.u_shaded);  
 
             /***** Leaf temperatures module by L. He  *****/
             Leaf_Temperatures(temp_air, slope, psychrometer, VPD_air, Cp_ca,

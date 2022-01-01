@@ -7,7 +7,7 @@
 void read_metro(DataFrame d, 
     float *m_rad, float *m_tem, float *m_hum, float *m_pre, float *m_wind) 
 {
-    const int nday = 365;
+    // const int nday = 365;
     // float m_rad[nday][24], m_tem[nday][24], m_hum[nday][24], m_pre[nday][24], m_wind[nday][24];
     NumericVector v_rad = d["rad"];
     NumericVector v_tem = d["tem"];
@@ -56,12 +56,6 @@ NumericMatrix beps_main(DataFrame d_metro, NumericVector LAI, NumericVector opts
     float m_rad[nday][24], m_tem[nday][24], m_hum[nday][24], m_pre[nday][24], m_wind[nday][24];
     read_metro(d_metro, (float *)m_rad, (float *)m_tem, (float *)m_hum, (float *)m_pre, (float *)m_wind);
 
-    double CosZs;
-
-    double var_o[41], var_n[41];
-    double v2last[41];
-    double outp[10]; //total[10]
-
     struct climatedata *meteo;
     struct results *mid_res;
     struct Soil *p_soil;
@@ -70,13 +64,17 @@ NumericMatrix beps_main(DataFrame d_metro, NumericVector LAI, NumericVector opts
     mid_res = (struct results *)malloc(1 * sizeof(struct results));
     p_soil = (struct Soil *)malloc(1 * sizeof(struct Soil));
 
-    NumericVector total(11);
-    double parameter[50];
+    double CosZs;
+    double var_o[41] = {}, var_n[41] = {};
+    double v2last[41] = {};
+
+    double outp[10] = {}; //total[10]
+    double total[11] = {};
+    double parameter[50] = {};
     readparam(landcover, parameter);
 
-    double coef[100];
+    double coef[100] = {};
     readcoef(landcover, soil_type, coef);
-
     // Open output file
     // char site[33], outp_fn[240];
     // sprintf(site, "p1");
@@ -169,7 +167,7 @@ NumericMatrix beps_main(DataFrame d_metro, NumericVector LAI, NumericVector opts
         }  // End of hourly loop
     }      // End of daily loop
     // fprintf(outp_ptr, "total GPP: %f \t ET: %f \tNEP: %f \n", total[1], total[2], total[3]);
-    printf("total GPP: %f \t ET: %f \tNEP: %f \n", total[1], total[2]); // , total[3]
+    printf("total GPP: %f \t ET: %f \n", total[1], total[2]); // , total[3]
     // fclose(outp_ptr);
 
     free(p_soil);

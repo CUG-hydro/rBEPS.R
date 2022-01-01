@@ -79,10 +79,12 @@ double LAMBDA();
 // New value for Quercus robor from Balaguer et al. 1996
 // Similar number from Dreyer et al. 2001, Tree Physiol, tau= 2710
 
-#define tau25 2904.12   //  tau coefficient                                                  \
-                        //  Arrhenius constants                                              \
-                        //  Eact for Michaelis-Menten const. for KC, KO and dark respiration \
-                        //  These values are from Harley
+//  tau coefficient                                                  
+//  Arrhenius constants                                              
+//  Eact for Michaelis-Menten const. for KC, KO and dark respiration
+//  These values are from Harley
+#define tau25 2904.12   
+
 #define ekc 80500.0     // Activation energy for K of CO2; J mol-1
 #define eko 14500.0     // Activation energy for K of O2, J mol-1
 #define erd 38000.0     // activation energy for dark respiration, eg Q10=2
@@ -109,9 +111,12 @@ double LAMBDA();
 #define epsigma6 33.3396e-8   //  6.0 * ep * sigma
 #define epsigma8 44.448e-8    //  8.0 * ep * sigma
 #define epsigma12 66.6792e-8  // 12.0 * ep * sigma
-#define betfact 1.5           // multiplication factor for aerodynamic \
-                              // sheltering, based on work by Grace and Wilson \
-                              //  constants for the polynomial equation for saturation vapor pressure-T function, es=f(t)
+
+// multiplication factor for aerodynamic 
+// sheltering, based on work by Grace and Wilson
+// constants for the polynomial equation for saturation vapor pressure-T function, es=f(t)
+#define betfact 1.5
+
 #define a1en 617.4
 #define a2en 42.22
 #define a3en 1.675

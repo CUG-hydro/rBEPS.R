@@ -34,18 +34,18 @@ void aerodynamic_conductance(
     double *rm, double *ra_u, double *ra_g, double *G_o_a, double *G_o_b, double *G_u_a, double *G_u_b) 
 {
     double kh_o;
-    double lw = 0.3;             // leaf characteristic width =0.3 for BS
-    double sigma = 5;            // shelter factor =5 for BS
     double rb_o, rb_u;           // leaf boundary layer for overstory and understory
     double k = 0.4;              // von Karman's constant
-    double beta = 0.5;           // Bowen's ratio
+    // double lw = 0.3;             // leaf characteristic width =0.3 for BS
+    // double sigma = 5;            // shelter factor =5 for BS
+    // double beta = 0.5;           // Bowen's ratio
     double cp = 1010;            // specific heat  of air (J/kg/K)
     double density_air = 1.225;  // density of air at 15 C (kg/m3)
     double gg = 9.8;             // gravitational acceleration (m/s2)
     double n = 5.0;
 
     double nu_lower;  // viscosity (cm2/s)
-    double uf;
+    // double uf;
     double psi;
     double d;      // displacement height (m)
     double z0;     // roughness length (m)
@@ -58,20 +58,19 @@ void aerodynamic_conductance(
     double gamma;
     double Re;  // Reynold's number
     double Nu;  // Nusselt number
-    double alfac;
     double alfaw;
 
     double ram;
-    double un_d, un_t, kh_u;
+    double un_d;  // un_t, kh_u;
 
     nu_lower = (13.3 + temp_air * 0.07) / 1000000;
-    alfac = 0.15;  // for CO2
+    // double alfac = 0.15;  // for CO2
     //alfaw=0.25;	// for H2O
     alfaw = (18.9 + temp_air * 0.07) / 1000000;
 
     if (wind_sp == 0) {
         uh = 0;
-        uf = 0;
+        // uf = 0;
         psi = 6;
         *G_o_a = 1 / 200.0;
         *G_o_b = 1 / 200.0;
@@ -115,7 +114,7 @@ void aerodynamic_conductance(
         /* leaf boundary resistance */
         rb_o = min(40, 0.5 * 0.1 / (alfaw * Nu));
 
-        uf = ustar;
+        // uf = ustar;
         *rm = ram;
         *G_o_a = 1 / ram;
         *G_o_b = 1 / rb_o;
@@ -126,7 +125,7 @@ void aerodynamic_conductance(
         // wind speed at the zero displacement of canopy
         un_d = uh * exp(-gamma * (1 - canopy_height_u * 0.8 / canopy_height_o));
         // wind speed at the zero displacement of canopy
-        un_t = uh * exp(-gamma * (1 - canopy_height_u / canopy_height_o));
+        // double un_t = uh * exp(-gamma * (1 - canopy_height_u / canopy_height_o));
 
         /* Reynold's number */
         //Re=(ud*lw/sigma)/nu_lower;
@@ -144,7 +143,7 @@ void aerodynamic_conductance(
         *G_u_a = 1 / (ram + *ra_u);
 
         gamma = 4.0;
-        kh_u = kh_o * exp(-gamma * (1 - canopy_height_u / canopy_height_o));
+        // double kh_u = kh_o * exp(-gamma * (1 - canopy_height_u / canopy_height_o));
 
         *ra_g = canopy_height_o / (gamma * kh_o) *
                 (exp(gamma * (1 - 0 / canopy_height_o)) - exp(gamma * (1 - canopy_height_u / canopy_height_o)));

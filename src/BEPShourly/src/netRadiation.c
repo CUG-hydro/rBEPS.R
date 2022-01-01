@@ -23,10 +23,7 @@
 /// @param  lai_u                     leaf area index of understory, without stem
 /// @param  lai_os                    leaf area index of overstory, with stem
 /// @param  lai_us                    leaf area index of understory, with stem
-/// @param  lai_o_sunlit              sunlit leaves LAI with consideration of stem, overstory
-/// @param  lai_o_shaded              shaded leaves LAI with consideration of stem, overstory
-/// @param  lai_u_sunlit              sunlit leaves LAI with consideration of stem, understory
-/// @param  lai_u_shaded              shaded leaves LAI with consideration of stem, understory
+/// @param  lai                       sunlit leaves LAI with consideration of stem (PAI)
 /// @param  clumping                  clumping index
 /// @param  temp_air                  air temperature
 /// @param  rh                        relative humidity
@@ -45,14 +42,8 @@
 /// @param  netRad_o                  net radiation on overstorey
 /// @param  netRad_u                  net radiation on understorey
 /// @param  netRad_g                  net radiation on ground
-/// @param  netRadLeaf.o_sunlit       net radiation at the leaf level, overstory sunlit, for ET calculation
-/// @param  netRadLeaf.o_shaded       net radiation at the leaf level, overstory shaded
-/// @param  netRadLeaf.u_sunlit       net radiation at the leaf level, understory sunlit
-/// @param  netRadLeaf.u_shaded       net radiation at the leaf level, understory shaded
-/// @param  netShortRadLeaf.o_sunlit  net shortwave radiation at leaf level, overstory sunlit, for GPP calculation
-/// @param  netShortRadLeaf.o_shaded  net shortwave radiation at leaf level, overstory shaded
-/// @param  netShortRadLeaf.u_sunlit  net shortwave radiation at leaf level, understory sunlit
-/// @param  nenetShortRadLeaf.u_shaded  net shortwave radiation at leaf level, understory shaded
+/// @param  netRadLeaf                net radiation at the leaf level, for ET calculation
+/// @param  netShortRadLeaf           net shortwave radiation at leaf level, for GPP calculation
 /// @return void
 void netRadiation(double shortRad_global, double CosZs, double temp_o, double temp_u, double temp_g,
                   double lai_o, double lai_u, double lai_os, double lai_us,  // LAI of overstorey and understorey, with and without stem
@@ -87,7 +78,7 @@ void netRadiation(double shortRad_global, double CosZs, double temp_o, double te
     double sb_constant = 5.67 / 100000000;                            // stephen-boltzman constant
     double cosQ_o, cosQ_u;                                            // indicators to describe leaf distribution angles in canopy. slightly related with LAI
     double gap_o_dir, gap_u_dir, gap_o_df, gap_u_df;                  //gap fraction of direct and diffuse radiation for overstorey and understorey (diffuse used for diffuse solar radiation and longwave radiation)
-    double gap_os_dir, gap_us_dir, gap_os_df, gap_us_df;              // like above, considering stem
+    double gap_os_df, gap_us_df;                                      // like above, considering stem
     double ratio_cloud;                                               // a simple ratio to differentiate diffuse and direct radiation
 
     // calculate albedo of canopy in this step
@@ -124,8 +115,8 @@ void netRadiation(double shortRad_global, double CosZs, double temp_o, double te
     gap_o_dir = exp(-0.5 * clumping * lai_o / CosZs);
     gap_u_dir = exp(-0.5 * clumping * lai_u / CosZs);
 
-    gap_os_dir = exp(-0.5 * clumping * lai_os / CosZs);  // considering stem
-    gap_us_dir = exp(-0.5 * clumping * lai_us / CosZs);
+    // double gap_os_dir = exp(-0.5 * clumping * lai_os / CosZs);  // considering stem
+    // double gap_us_dir = exp(-0.5 * clumping * lai_us / CosZs);
 
     cosQ_o = 0.537 + 0.025 * lai_o;
     cosQ_u = 0.537 + 0.025 * lai_u;
