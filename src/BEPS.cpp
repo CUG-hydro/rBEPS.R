@@ -48,14 +48,22 @@ NumericMatrix beps_main(DataFrame d_metro, NumericVector LAI, NumericVector opts
     double st        = opts["soiltemp"];
     double sw        = opts["soilwater"];
     double snowdepth = opts["snowdepth"];
-    int j_start = opts["j_start"];
-    int j_end   = opts["j_end"];
+    // int j_start = opts["j_start"];
+    // int j_end   = opts["j_end"];
 
+    int N = d_metro.nrow();
+    const int nday = floor(N / 24);
     // declare variables
-    const int nday = 365;
-    float m_rad[nday][24], m_tem[nday][24], m_hum[nday][24], m_pre[nday][24], m_wind[nday][24];
-    read_metro(d_metro, (float *)m_rad, (float *)m_tem, (float *)m_hum, (float *)m_pre, (float *)m_wind);
+    // const int nday = 365;
+    NumericVector v_rad  = d_metro["rad"];
+    NumericVector v_tem  = d_metro["tem"];
+    NumericVector v_hum  = d_metro["hum"];
+    NumericVector v_pre  = d_metro["pre"];
+    NumericVector v_wind = d_metro["wind"];
+    IntegerVector v_jday = d_metro["jday"];
 
+    // float m_rad[nday][24], m_tem[nday][24], m_hum[nday][24], m_pre[nday][24], m_wind[nday][24];
+    // read_metro(d_metro, (float *)m_rad, (float *)m_tem, (float *)m_hum, (float *)m_pre, (float *)m_wind);
     struct climatedata *meteo;
     struct results *mid_res;
     struct Soil *p_soil;
@@ -87,34 +95,36 @@ NumericMatrix beps_main(DataFrame d_metro, NumericVector LAI, NumericVector opts
 
     /*****  start main simulation *****/
     printf("simulation under progress...\n");
-    int i, k = 0;
-
-    NumericMatrix res((j_end - j_start + 1) * 24, 16);
+    NumericMatrix res((nday)*24, 16);
     CharacterVector names = {"gpp_o_sunlit", "gpp_u_sunlit", "gpp_o_shaded", "gpp_u_shaded", 
         "plant_resp", "npp_o", "npp_u", "GPP", "NPP", "NEP", "soil_resp", 
         "Net_Rad", "SH", "LH", "Trans", "Evap"};
     colnames(res) = names;
 
+    int i = 0;
     // Day loop begin
-    for (int jday = j_start; jday <= j_end; jday++) {
+    for (int t = 0; t < nday; t++) { // daily
         /***** re-calculate LAI & renew clump index *****/
-        double lai = LAI[jday-1] * parameter[2] / clumping;
+        double lai = LAI[t] * parameter[2] / clumping;
+        int jday = v_jday[t];
+
         // Hour loop begin
-        for (int rstep = 0; rstep < 24; rstep++) {
+        for (int rstep = 0; rstep < 24; rstep++) { // hourly
+            int k = t * 24 + rstep;
             // printf("jday = %02d, hour = %02d\n", jday, rstep);
-            k += 1;
-            int flag = (k == 1) ? 0 : 1;
+            // k += 1;
+            int flag = (k == 0) ? 0 : 1;
             // int flag = (jday == 1 && rstep == 0) ? 0 : 1;
             s_coszs(jday, rstep, lat, lon, &CosZs); // cos_solar zenith angle Z
 
-            meteo->Srad = m_rad[jday - 1][rstep];
-            meteo->temp = m_tem[jday - 1][rstep];
-            meteo->rain = m_pre[jday - 1][rstep];
-            meteo->wind = m_wind[jday - 1][rstep];
+            meteo->Srad = v_rad[k];
+            meteo->temp = v_tem[k];
+            meteo->rain = v_pre[k];
+            meteo->wind = v_wind[k];
             meteo->LR = -200.0;  //  -200.0 means no measured long-wave radiation, the value will be calculated later
 
-            double tem = m_tem[jday - 1][rstep];
-            double hum = m_hum[jday - 1][rstep];
+            double tem = v_tem[k];
+            double hum = v_hum[k];
 
             // Vapour pressure in mbar
             double es = 0.46 * hum * (tem + 273.16) / 100;
@@ -157,7 +167,7 @@ NumericMatrix beps_main(DataFrame d_metro, NumericVector LAI, NumericVector opts
             // outp[4] = mid_res->npp_o + mid_res->npp_u;
             
             NumericVector v = results2vec(mid_res);
-            res(k - 1, _) = v;
+            res(k, _) = v;
             // Write hourly output to files
             // fprintf(outp_ptr,"%d %d gpp= %f tr= %f Ev= %f \n",jday,rstep,outp[1],outp[2],outp[3]);
             // Sum of output

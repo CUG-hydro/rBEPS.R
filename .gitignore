@@ -9,3 +9,10 @@
 # *.txt
 
 */temp
+Input/
+
+# Figures
+*.pdf
+*.png
+*.jpg
+*.docx

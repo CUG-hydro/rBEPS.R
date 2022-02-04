@@ -26,9 +26,9 @@ struct Soil{
     int step_period;
 
     // Conditions on the top boundary
-    double Zp;				// depth of ponded water on the ground surface
-    double Zsp;             // snow depth
-    double r_rain_g;		// the rainfall rate, un--on understory g--on ground surface  m/s
+    double Zp;				// depth of ponded water on the ground surface, `[m]`
+    double Zsp;             // snow depth, `[m]`
+    double r_rain_g;		// the rainfall rate, un--on understory g--on ground surface, `[m/s]`
     double soil_r;			// soil surface resistance for water, discuss with Remi - an interface here
     double r_drainage;
 
@@ -47,38 +47,43 @@ struct Soil{
     double dt[MAX_LAYERS];           // the weight calculated from soil_water_factor **re-calculate in the model
 
     // From read-param function
-    double thermal_cond[MAX_LAYERS]; // thermal conductivity. Unit:
-    double theta_vfc[MAX_LAYERS];    // field capacity (not used in this model. LHE. Feb. 01, 2013)
-    double theta_vwp[MAX_LAYERS];    // wilt point*/
-    double fei[MAX_LAYERS];          // porosity */
-    double Ksat[MAX_LAYERS];         // saturated hydraulic conductivity
-    double psi_sat[MAX_LAYERS];      // water potential at sat
-    double b[MAX_LAYERS];            // Cambell parameter b
-    double density_soil[MAX_LAYERS]; // soil bulk density of layer. LHE. Feb. 12, 2013.
-    double f_org[MAX_LAYERS];        // volume fraction of organic matter in layer (%).
+    double thermal_cond[MAX_LAYERS]; // thermal conductivity. `[W m-1 K-1]`
+    double theta_vfc[MAX_LAYERS];    // field capacity, `[m3 m-3]` (not used in this model. LHE. Feb. 01, 2013)
+    double theta_vwp[MAX_LAYERS];    // wilt point    , `[m3 m-3]`
+    double fei[MAX_LAYERS];          // porosity      , `[m3 m-3]`
+    double Ksat[MAX_LAYERS];         // saturated hydraulic conductivity, `[m s-1]`
+    double psi_sat[MAX_LAYERS];      // water potential at sat (`m`)
+    double b[MAX_LAYERS];            // Cambell parameter b, `[-]`
+    double density_soil[MAX_LAYERS]; // soil bulk density  , `[kg m-3`]. LHE. Feb. 12, 2013.
+    double f_org[MAX_LAYERS];        // volume fraction of organic matter, `[%]`.
 
     // Variables need to save
-    double ice_ratio[MAX_LAYERS];    // the ratio of ice of soil layer
-    double thetam[MAX_LAYERS], thetam_prev[MAX_LAYERS]; // soil water content in this layer
+    double ice_ratio[MAX_LAYERS];    // the ratio of ice, (-)
+    double thetam[MAX_LAYERS], thetam_prev[MAX_LAYERS];  // soil water content, M3 m-3.
 
-    // soil temperature in this layer, don't change because it is used in soil_water_factor_v2, and UpdateSoil_Moisture.
+    // soil temperature in this layer, don't change because it is used in 
+    // `soil_water_factor_v2`, and `UpdateSoil_Moisture`.
+    // previous and current
     double temp_soil_p[MAX_LAYERS];
-    // soil temperature in this layer. don't change because it is used in soil_water_factor_v2, and UpdateSoil_Moisture.
     double temp_soil_c[MAX_LAYERS];
-
 
     // Derived variables below:
     double f_ice[MAX_LAYERS];        // derived var.
-    double psim[MAX_LAYERS];         // soil water suction in this layer. Note: this variable can be derived from other parameters. LHE.
-    double thetab[MAX_LAYERS];       // soil water content at the bottom of each layer
     double psib[MAX_LAYERS];         // soil water suction at the bottom this layer
-    double r_waterflow[MAX_LAYERS];  // the liquid water flow rates at the soil layer interfaces  'eg. 0,1,2..., represents the surface, the bottom of layer1, the bottom of layer2,...
+    double psim[MAX_LAYERS];         // soil water suction in this layer. 
+    // Note: this variable can be derived from other parameters. LHE.
 
-    double km[MAX_LAYERS], Kb[MAX_LAYERS];   //the hydraulic conductivity of certain soil layer
+    double thetab[MAX_LAYERS];       // soil water content at the bottom of each layer
+    double r_waterflow[MAX_LAYERS];  // the liquid water flow rates at the soil layer interfaces  
+    // 'eg. 0,1,2..., represents the surface, the bottom of layer1, the bottom of layer2,...
+
+    double km[MAX_LAYERS], Kb[MAX_LAYERS]; //the hydraulic conductivity of certain soil layer
     double KK[MAX_LAYERS];           // The average  conductivity of two soil layers.*/
 
     double Cs[MAX_LAYERS];
-    double lambda[MAX_LAYERS];       // thermal conductivity of each soil layer /* ={0} by LHE */ // not used in gpp-only version. derived var.
+
+    // not used in gpp-only version. derived var.
+    double lambda[MAX_LAYERS];       // thermal conductivity of each soil layer /* ={0} by LHE */ 
     double Ett[MAX_LAYERS];          // ET in each layer. derived var
 
     // define a lambda_top for ice?

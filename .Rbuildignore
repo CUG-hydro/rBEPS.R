@@ -6,3 +6,4 @@
 ^Rcpp_debug\.R$
 ^\.github$
 ^\.vscode$
+^Input$

@@ -32,13 +32,13 @@ OBJS = $(patsubst %,$(ODIR)/%,$(_OBJS))
 
 # gcc=/usr/bin/gcc-9
 CC=gcc
-#	icc -g -lm -o bepsp $(OBJSects)
+#	icc -g -lm -o beps $(OBJSects)
 # echo $(OBJS) 
 
-bepsp.exe: $(OBJS) 
+beps.exe: $(OBJS) 
 	echo $(OBJS) 
-	$(CC) $(CFLAGS) -o bepsp.exe $(OBJS) -lm
-	# gcc $(CFLAGS) -o bepsp $(OBJSects) -lm
+	$(CC) $(CFLAGS) -o beps.exe $(OBJS) -lm
+	# gcc $(CFLAGS) -o beps $(OBJSects) -lm
 
 # list the dependencies for OBJSect files - those header files which help build OBJSects
 # how to build all OBJSect files from all dependent source files
@@ -47,7 +47,7 @@ $(ODIR)/%.o: $(IDIR)/%.c
 	$(CC) -c -o $@ $< $(CFLAGS)
 
 clean:
-	rm $(OBJS) bepsp.exe
+	rm $(OBJS) beps.exe
 
 # $(OBJSects): $(sources)
 #	icc -g -c $(sources)
