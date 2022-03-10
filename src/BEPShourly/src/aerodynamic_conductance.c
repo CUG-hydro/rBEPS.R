@@ -18,20 +18,21 @@
  * @param  SH_o_p           sensible heat flux from overstory
  * @param  lai_o            leaf area index, overstory (lai_o+stem_o)
  * @param  lai_u            leaf area index, understory (lai_u+stem_u)
- * 
+ *
  * @return
- * - `rm`    : aerodynamic resistance, overstory, in s/m
+ * - `ra_o`  : aerodynamic resistance, overstory, in s/m
  * - `ra_u`  : aerodynamic resistance, understory, in s/m
  * - `ra_g`  : aerodynamic resistance, ground, in s/m
- * - `G_o_a` : aerodynamic conductance for leaves, overstory
- * - `G_o_b` : boundary layer conductance for leaves, overstory
- * - `G_u_a` : aerodynamic conductance for leaves, understory
- * - `G_u_b` : boundary layer conductance for leaves, understory
+ *
+ * - `Ga_o` : aerodynamic conductance for leaves, overstory
+ * - `Ga_u` : aerodynamic conductance for leaves, understory
+ * - `Gb_o` : boundary layer conductance for leaves, overstory
+ * - `Gb_u` : boundary layer conductance for leaves, understory
  */
 void aerodynamic_conductance(
     double canopy_height_o, double canopy_height_u, double zz, double clumping,
     double temp_air, double wind_sp, double SH_o_p, double lai_o, double lai_u,
-    double *rm, double *ra_u, double *ra_g, double *G_o_a, double *G_o_b, double *G_u_a, double *G_u_b) 
+    double *ra_o, double *ra_u, double *ra_g, double *Ga_o, double *Gb_o, double *Ga_u, double *Gb_u) 
 {
     double kh_o;
     double rb_o, rb_u;           // leaf boundary layer for overstory and understory
@@ -72,10 +73,10 @@ void aerodynamic_conductance(
         uh = 0;
         // uf = 0;
         psi = 6;
-        *G_o_a = 1 / 200.0;
-        *G_o_b = 1 / 200.0;
-        *G_u_a = 1 / 200.0;
-        *G_u_b = 1 / 200.0;
+        *Ga_o = 1 / 200.0;
+        *Gb_o = 1 / 200.0;
+        *Ga_u = 1 / 200.0;
+        *Gb_u = 1 / 200.0;
         *ra_g = 300;
     } else {
         d = 0.8 * canopy_height_o;
@@ -115,9 +116,9 @@ void aerodynamic_conductance(
         rb_o = min(40, 0.5 * 0.1 / (alfaw * Nu));
 
         // uf = ustar;
-        *rm = ram;
-        *G_o_a = 1 / ram;
-        *G_o_b = 1 / rb_o;
+        *ra_o = ram;
+        *Ga_o = 1 / ram;
+        *Gb_o = 1 / rb_o;
 
         kh_o = 0.41 * ustar * (canopy_height_o - canopy_height_o * 0.8) / psi;
         gamma = 0.1 + pow(lai_o, 0.75);
@@ -137,10 +138,10 @@ void aerodynamic_conductance(
         /* leaf boundary resistance */
         rb_u = 0.5 * 0.1 / (alfaw * Nu);
         rb_u = min(40, rb_u);
-        *G_u_b = 1.0 / rb_u;
+        *Gb_u = 1.0 / rb_u;
 
         *ra_u = canopy_height_o / (gamma * kh_o) * (exp(gamma * (1 - canopy_height_u / canopy_height_o)) - 1);
-        *G_u_a = 1 / (ram + *ra_u);
+        *Ga_u = 1 / (ram + *ra_u);
 
         gamma = 4.0;
         // double kh_u = kh_o * exp(-gamma * (1 - canopy_height_u / canopy_height_o));

@@ -417,8 +417,8 @@ OUTDAT:
     gs_co2_mole = gs_h2o_mole / 1.6;
 
     *ci = cs - *aphoto / gs_co2_mole;
-    *Gs_w = gs_h2o_mole * temp_leaf_K * (met.pstat273);  // m s-1
-
+    *Gs_w = gs_h2o_mole * temp_leaf_K * (met.pstat273);  // m s-1; Monteith, 2013, Eq 3.14
+    
     return;
 }
 

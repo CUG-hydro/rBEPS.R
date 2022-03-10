@@ -119,7 +119,7 @@ void inter_prg(int jday, int rstep, double lai, double clumping,
     
     double VPS_air;
     double VPD_air;  // Vapor pressure deficit term
-    double GH_o, G_o_a, G_o_b, G_u_a, G_u_b;
+    double GH_o, Ga_o, Gb_o, Ga_u, Gb_u;
     double canopyh_o, canopyh_u;
 
     double mass_water_g;
@@ -307,17 +307,17 @@ void inter_prg(int jday, int rstep, double lai, double clumping,
             num = num + 1;
             /***** Aerodynamic_conductance module by G.Mo  *****/
             aerodynamic_conductance(canopyh_o, canopyh_u, height_wind_sp, clumping, temp_air, wind_sp, GH_o,
-                                    lai_o + stem_o, lai_u + stem_u, &ra_o, &ra_u, &ra_g, &G_o_a, &G_o_b, &G_u_a, &G_u_b);
+                                    lai_o + stem_o, lai_u + stem_u, &ra_o, &ra_u, &ra_g, &Ga_o, &Gb_o, &Ga_u, &Gb_u);
 
-            Gh.o_sunlit = 1.0 / (1.0 / G_o_a + 0.5 / G_o_b);  // heat conductance of sunlit leaves of overstorey
-            Gh.o_shaded = 1.0 / (1.0 / G_o_a + 0.5 / G_o_b);  // heat conductance of shaded leaves of overstorey
-            Gh.u_sunlit = 1.0 / (1.0 / G_u_a + 0.5 / G_u_b);  // heat conductance of sunlit leaves of understorey
-            Gh.u_shaded = 1.0 / (1.0 / G_u_a + 0.5 / G_u_b);  // heat conductance of shaded leaves of understorey
+            Gh.o_sunlit = 1.0 / (1.0 / Ga_o + 0.5 / Gb_o);  // heat conductance of sunlit leaves of overstorey
+            Gh.o_shaded = 1.0 / (1.0 / Ga_o + 0.5 / Gb_o);  // heat conductance of shaded leaves of overstorey
+            Gh.u_sunlit = 1.0 / (1.0 / Ga_u + 0.5 / Gb_u);  // heat conductance of sunlit leaves of understorey
+            Gh.u_shaded = 1.0 / (1.0 / Ga_u + 0.5 / Gb_u);  // heat conductance of shaded leaves of understorey
 
-            Gww.o_sunlit = 1.0 / (1.0 / G_o_a + 1.0 / G_o_b + 100);  // conductance for intercepted water of sunlit leaves of overstorey
-            Gww.o_shaded = 1.0 / (1.0 / G_o_a + 1.0 / G_o_b + 100);  // conductance for intercepted water of shaded leaves of overstorey
-            Gww.u_sunlit = 1.0 / (1.0 / G_u_a + 1.0 / G_u_b + 100);  // conductance for intercepted water of sunlit leaves of understorey
-            Gww.u_shaded = 1.0 / (1.0 / G_u_a + 1.0 / G_u_b + 100);  // conductance for intercepted water of shaded leaves of understorey
+            Gww.o_sunlit = 1.0 / (1.0 / Ga_o + 1.0 / Gb_o + 100);  // conductance for intercepted water of sunlit leaves of overstorey
+            Gww.o_shaded = 1.0 / (1.0 / Ga_o + 1.0 / Gb_o + 100);  // conductance for intercepted water of shaded leaves of overstorey
+            Gww.u_sunlit = 1.0 / (1.0 / Ga_u + 1.0 / Gb_u + 100);  // conductance for intercepted water of sunlit leaves of understorey
+            Gww.u_shaded = 1.0 / (1.0 / Ga_u + 1.0 / Gb_u + 100);  // conductance for intercepted water of shaded leaves of understorey
 
             // temperatures of overstorey and understorey canopies
             Tco = (Tc_old.o_sunlit * PAI.o_sunlit + Tc_old.o_shaded * PAI.o_shaded) / (PAI.o_sunlit + PAI.o_shaded);
@@ -326,7 +326,8 @@ void inter_prg(int jday, int rstep, double lai, double clumping,
             /*****  Net radiation at canopy and leaf level module by X.Luo  *****/
             netRadiation(Ks, CosZs, Tco, Tcu, temp_grd, lai_o, lai_u, lai_o + stem_o, lai_u + stem_u, 
                          PAI, 
-                         clumping, temp_air, rh_air, alpha_v_sw[kkk], alpha_n_sw[kkk], percentArea_snow_o, percentArea_snow_u,
+                         clumping, temp_air, rh_air, alpha_v_sw[kkk], alpha_n_sw[kkk], 
+                         percentArea_snow_o, percentArea_snow_u,
                          Xg_snow[kkk], alpha_v_o, alpha_n_o, alpha_v_u, alpha_n_u, alpha_v_g, alpha_n_g,
                          &radiation_o, &radiation_u, &radiation_g, 
                          &radiation, &R);
@@ -334,10 +335,10 @@ void inter_prg(int jday, int rstep, double lai, double clumping,
             /*****  Photosynthesis module by B. Chen  *****/
 
             // Four components: overstory sunlit and shaded, understory sunlit and shaded
-            Gw.o_sunlit = 1.0 / (1.0 / G_o_a + 1.0 / G_o_b + 1.0 / Gs_old.o_sunlit);  // conductance of sunlit leaves of overstorey for water
-            Gw.o_shaded = 1.0 / (1.0 / G_o_a + 1.0 / G_o_b + 1.0 / Gs_old.o_shaded);  // conductance of shaded leaves of overstorey for water
-            Gw.u_sunlit = 1.0 / (1.0 / G_u_a + 1.0 / G_u_b + 1.0 / Gs_old.u_sunlit);  // conductance of sunlit leaves of understorey for water
-            Gw.u_shaded = 1.0 / (1.0 / G_u_a + 1.0 / G_u_b + 1.0 / Gs_old.u_shaded);  // conductance of shaded leaves of understorey for water
+            Gw.o_sunlit = 1.0 / (1.0 / Ga_o + 1.0 / Gb_o + 1.0 / Gs_old.o_sunlit);  // conductance of sunlit leaves of overstorey for water
+            Gw.o_shaded = 1.0 / (1.0 / Ga_o + 1.0 / Gb_o + 1.0 / Gs_old.o_shaded);  // conductance of shaded leaves of overstorey for water
+            Gw.u_sunlit = 1.0 / (1.0 / Ga_u + 1.0 / Gb_u + 1.0 / Gs_old.u_sunlit);  // conductance of sunlit leaves of understorey for water
+            Gw.u_shaded = 1.0 / (1.0 / Ga_u + 1.0 / Gb_u + 1.0 / Gs_old.u_shaded);  // conductance of shaded leaves of understorey for water
 
             leleaf.o_sunlit = Gw.o_sunlit * (VPD_air + slope * (Tc_old.o_sunlit - temp_air)) * rho_a * Cp_ca / psychrometer;
             leleaf.o_shaded = Gw.o_shaded * (VPD_air + slope * (Tc_old.o_shaded - temp_air)) * rho_a * Cp_ca / psychrometer;
@@ -345,13 +346,13 @@ void inter_prg(int jday, int rstep, double lai, double clumping,
             leleaf.u_shaded = Gw.u_shaded * (VPD_air + slope * (Tc_old.u_shaded - temp_air)) * rho_a * Cp_ca / psychrometer;
 
             if (CosZs > 0) {
-                photosynthesis(Tc_old.o_sunlit, R.o_sunlit, e_a10, G_o_b, Vcmax_sunlit, f_soilwater, b_h2o, m_h2o, Ci_old.o_sunlit,
+                photosynthesis(Tc_old.o_sunlit, R.o_sunlit, e_a10, Gb_o, Vcmax_sunlit, f_soilwater, b_h2o, m_h2o, Ci_old.o_sunlit,
                                temp_air, leleaf.o_sunlit, &Gs_new.o_sunlit, &Ac.o_sunlit, &Ci_new.o_sunlit);
-                photosynthesis(Tc_old.o_shaded, R.o_shaded, e_a10, G_o_b, Vcmax_shaded, f_soilwater, b_h2o, m_h2o, Ci_old.o_shaded,
+                photosynthesis(Tc_old.o_shaded, R.o_shaded, e_a10, Gb_o, Vcmax_shaded, f_soilwater, b_h2o, m_h2o, Ci_old.o_shaded,
                                temp_air, leleaf.o_shaded, &Gs_new.o_shaded, &Ac.o_shaded, &Ci_new.o_shaded);
-                photosynthesis(Tc_old.u_sunlit, R.u_sunlit, e_a10, G_u_b, Vcmax_sunlit, f_soilwater, b_h2o, m_h2o, Ci_old.u_sunlit,
+                photosynthesis(Tc_old.u_sunlit, R.u_sunlit, e_a10, Gb_u, Vcmax_sunlit, f_soilwater, b_h2o, m_h2o, Ci_old.u_sunlit,
                                temp_air, leleaf.u_sunlit, &Gs_new.u_sunlit, &Ac.u_sunlit, &Ci_new.u_sunlit);
-                photosynthesis(Tc_old.u_shaded, R.u_shaded, e_a10, G_u_b, Vcmax_shaded, f_soilwater, b_h2o, m_h2o, Ci_old.u_shaded,
+                photosynthesis(Tc_old.u_shaded, R.u_shaded, e_a10, Gb_u, Vcmax_shaded, f_soilwater, b_h2o, m_h2o, Ci_old.u_shaded,
                                temp_air, leleaf.u_shaded, &Gs_new.u_shaded, &Ac.u_shaded, &Ci_new.u_shaded);
             } else {
                 init_leaf_dbl(&Gs_new, 0.0001);
@@ -365,15 +366,15 @@ void inter_prg(int jday, int rstep, double lai, double clumping,
             init_leaf_struct(&Cs_old, &Cs_new);
             init_leaf_struct(&Gs_old, &Gs_new);  // m/s
                                      
-            Gw.o_sunlit = 1.0 / (1.0 / G_o_a + 1.0 / G_o_b + 1.0 / Gs_new.o_sunlit);  //conductance of leaves of for water
-            Gw.o_shaded = 1.0 / (1.0 / G_o_a + 1.0 / G_o_b + 1.0 / Gs_new.o_shaded);  
-            Gw.u_sunlit = 1.0 / (1.0 / G_u_a + 1.0 / G_u_b + 1.0 / Gs_new.u_sunlit);  
-            Gw.u_shaded = 1.0 / (1.0 / G_u_a + 1.0 / G_u_b + 1.0 / Gs_new.u_shaded);
+            Gw.o_sunlit = 1.0 / (1.0 / Ga_o + 1.0 / Gb_o + 1.0 / Gs_new.o_sunlit);  //conductance of leaves of for water
+            Gw.o_shaded = 1.0 / (1.0 / Ga_o + 1.0 / Gb_o + 1.0 / Gs_new.o_shaded);  
+            Gw.u_sunlit = 1.0 / (1.0 / Ga_u + 1.0 / Gb_u + 1.0 / Gs_new.u_sunlit);  
+            Gw.u_shaded = 1.0 / (1.0 / Ga_u + 1.0 / Gb_u + 1.0 / Gs_new.u_shaded);
 
-            Gc.o_sunlit = 1.0 / (1.0 / G_o_a + 1.4 / G_o_b + 1.6 / Gs_new.o_sunlit);  // conductance of leaves of for CO2
-            Gc.o_shaded = 1.0 / (1.0 / G_o_a + 1.4 / G_o_b + 1.6 / Gs_new.o_shaded);  
-            Gc.u_sunlit = 1.0 / (1.0 / G_u_a + 1.4 / G_u_b + 1.6 / Gs_new.u_sunlit);  
-            Gc.u_shaded = 1.0 / (1.0 / G_u_a + 1.4 / G_u_b + 1.6 / Gs_new.u_shaded);  
+            Gc.o_sunlit = 1.0 / (1.0 / Ga_o + 1.4 / Gb_o + 1.6 / Gs_new.o_sunlit);  // conductance of leaves of for CO2
+            Gc.o_shaded = 1.0 / (1.0 / Ga_o + 1.4 / Gb_o + 1.6 / Gs_new.o_shaded);  
+            Gc.u_sunlit = 1.0 / (1.0 / Ga_u + 1.4 / Gb_u + 1.6 / Gs_new.u_sunlit);  
+            Gc.u_shaded = 1.0 / (1.0 / Ga_u + 1.4 / Gb_u + 1.6 / Gs_new.u_shaded);  
 
             /***** Leaf temperatures module by L. He  *****/
             Leaf_Temperatures(temp_air, slope, psychrometer, VPD_air, Cp_ca,
